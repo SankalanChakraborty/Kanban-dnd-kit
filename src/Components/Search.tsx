@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Button from "./Button";
 
 const Search = () => {
   const searchChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -6,13 +7,15 @@ const Search = () => {
   };
   const [searchValue, setSearchValue] = useState("");
   return (
-    <div className="w-full">
+    <div className="w-full flex gap-2">
       <input
-        className="w-full py-2 px-4 bg-gray-100 outline-none border-0 rounded-lg hover:bg-gray-300 transition-all ease-in-out"
+        className="w-2xs py-2 px-4 bg-gray-100 outline-none border-0 rounded-lg transition-all ease-in-out"
         type="text"
         value={searchValue}
+        placeholder="Add a todo item..."
         onChange={searchChangeHandler}
       />
+      <Button>Add Item</Button>
     </div>
   );
 };
