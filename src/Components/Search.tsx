@@ -1,11 +1,34 @@
 import { useState } from "react";
 import Button from "./Button";
+import { useTaskContext } from "../Context/TaskContext";
+import type { Task } from "../interface";
+import { v4 as uuidv4 } from "uuid";
 
 const Search = () => {
+  const [searchValue, setSearchValue] = useState("");
+  const { setTasks } = useTaskContext();
   const searchChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
-  const [searchValue, setSearchValue] = useState("");
+
+  const clickHandler = () => {
+    if (!searchValue) return;
+
+    const newTask: Task = {
+      id: String(uuidv4()),
+      title: searchValue,
+      status: "todo",
+      priority: "low",
+      createdAt: new Date().toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }),
+    };
+    setTasks((prevtasks) => [...prevtasks, newTask]);
+    setSearchValue("");
+  };
+
   return (
     <div className="w-full flex gap-2">
       <input
@@ -15,7 +38,7 @@ const Search = () => {
         placeholder="Add a todo item..."
         onChange={searchChangeHandler}
       />
-      <Button>Add Item</Button>
+      <Button onClick={clickHandler}>Add Item</Button>
     </div>
   );
 };
