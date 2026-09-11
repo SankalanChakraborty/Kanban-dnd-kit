@@ -9,7 +9,7 @@ const Search = () => {
   return (
     <div className="w-full flex gap-2">
       <input
-        className="w-2xs py-2 px-4 bg-gray-100 outline-none border-0 rounded-lg transition-all ease-in-out"
+        className="w-2xs py-2 px-4 bg-slate-800 text-slate-100 placeholder-slate-500 outline-none border border-slate-700 rounded-lg transition-all ease-in-out focus:border-blue-500 focus:shadow-sm focus:shadow-blue-900"
         type="text"
         value={searchValue}
         placeholder="Add a todo item..."
