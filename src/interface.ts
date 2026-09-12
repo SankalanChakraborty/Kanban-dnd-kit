@@ -1,17 +1,18 @@
+type TaskType = "to do" | "in progress" | "done";
+type TaskPriority = "low" | "medium" | "high";
+export interface ColumnType {
+  id: string;
+  title: TaskType;
+}
+
 export interface Task {
   id: string;
   title: string;
   description?: string;
-  status: "to do" | "in progress" | "done";
-  priority: "low" | "medium" | "high";
+  status: TaskType;
+  priority: TaskPriority;
   dueDate?: string;
   assignee?: { name: string; avatarColor: string };
   createdAt: string;
-}
-
-type columnType = "to do" | "in progress" | "done";
-export interface column {
-  id: string;
-  title: columnType;
-  tasks: Task[] | [];
+  columnId: ColumnType["id"];
 }

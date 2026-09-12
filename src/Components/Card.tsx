@@ -26,7 +26,7 @@ const Card = ({ task }: CardProps) => {
 
   return (
     <div
-      className="card-container p-5 flex flex-col gap-4 w-56 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl shadow-lg border border-slate-700 hover:border-slate-600 hover:shadow-xl transition-all duration-300"
+      className="card-container p-5 flex flex-col gap-4 w-56 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl shadow-lg border border-slate-700 hover:border-slate-600 hover:shadow-xl hover:cursor-grab transition-all duration-300"
       ref={ref}
     >
       <span

@@ -1,10 +1,10 @@
 import { useTaskContext } from "../Context/TaskContext";
 import Card from "./Card";
-import type { column } from "../interface";
+import type { ColumnType } from "../interface";
 import { useDroppable } from "@dnd-kit/react";
 
 interface columnProps {
-  column: column;
+  column: ColumnType;
 }
 
 const Column = ({ column }: columnProps) => {
@@ -12,7 +12,7 @@ const Column = ({ column }: columnProps) => {
   const { isDropTarget, ref } = useDroppable({ id: column.id });
 
   return (
-    <div className="todo-col flex-1 h-full p-6 bg-slate-800 rounded-lg flex flex-col border border-slate-700 shadow-sm hover:shadow-md transition-shadow">
+    <div className="todo-col flex-1 h-full p-6 bg-slate-800 rounded-lg flex flex-col gap-2 border border-slate-700 shadow-sm hover:shadow-md transition-shadow">
       <div className="column-heade flex justify-between">
         <span className="text-slate-200 text-sm uppercase font-semibold">
           {column.title}
@@ -23,10 +23,14 @@ const Column = ({ column }: columnProps) => {
       </div>
       <div
         ref={ref}
-        className="card-droppable-area w-full h-full py-4 flex flex-col gap-3"
+        className={`card-droppable-area w-full h-full py-4 flex flex-col gap-3  ${
+          isDropTarget
+            ? "bg-blue-500/20 border-2 border-blue-500 border-dashed"
+            : "border-slate-700 bg-slate-800"
+        }`}
       >
         {tasks.map((task) =>
-          task.status === column.title ? (
+          task.columnId === column.id ? (
             <Card key={task.id} task={task} />
           ) : null,
         )}
