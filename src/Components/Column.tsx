@@ -21,7 +21,10 @@ const Column = ({ column }: columnProps) => {
           +
         </button>
       </div>
-      <div ref={ref} className="card-droppable-area w-full h-full py-4">
+      <div
+        ref={ref}
+        className="card-droppable-area w-full h-full py-4 flex flex-col gap-3"
+      >
         {tasks.map((task) =>
           task.status === column.title ? (
             <Card key={task.id} task={task} />
