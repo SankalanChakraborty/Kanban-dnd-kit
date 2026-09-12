@@ -1,14 +1,20 @@
-import { useTaskContext } from "../Context/TaskContext";
 import type { Task } from "../interface";
 import { CiCalendarDate } from "react-icons/ci";
+import { useDraggable } from "@dnd-kit/react";
 
-const Cards = () => {
-  const { tasks } = useTaskContext();
+interface CardProps {
+  task: Task;
+}
+
+const Card = ({ task }: CardProps) => {
+  const { ref } = useDraggable({
+    id: task.id,
+  });
 
   const getPriorityBgColor = (priority: string) => {
     switch (priority) {
       case "low":
-        return "bg-emerald-500";
+        return "bg-emerald-300";
       case "medium":
         return "bg-amber-500";
       case "high":
@@ -18,13 +24,13 @@ const Cards = () => {
     }
   };
 
-  return tasks.map((task: Task) => (
+  return (
     <div
-      key={task.id}
       className="card-container p-5 flex flex-col gap-4 w-56 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl shadow-lg border border-slate-700 hover:border-slate-600 hover:shadow-xl transition-all duration-300"
+      ref={ref}
     >
       <span
-        className={`priority px-3 py-1 rounded-full text-xs text-white font-bold w-fit uppercase tracking-wider ${getPriorityBgColor(task.priority)} `}
+        className={`priority px-3 py-1 rounded-full text-[8px] text-white font-bold w-fit uppercase tracking-wider ${getPriorityBgColor(task.priority)} `}
       >
         {task.priority}
       </span>
@@ -43,7 +49,7 @@ const Cards = () => {
         <span>{task.createdAt}</span>
       </div>
     </div>
-  ));
+  );
 };
 
-export default Cards;
+export default Card;
