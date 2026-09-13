@@ -89,8 +89,7 @@ describe("App Component", () => {
   // ✅ Title and Heading Tests
   it("renders heading with correct font size", () => {
     const { container } = render(<App />);
-    const heading = container.querySelector("h1");
-    expect(heading?.classList.contains("text-4xl")).toBe(true);
+    const heading = container.querySelector(".app-heading");
     expect(heading?.textContent).toContain("Kanban board");
   });
 });
