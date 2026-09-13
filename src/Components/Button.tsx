@@ -10,6 +10,7 @@ const Button = ({ children, buttonType }: ButtonProps) => {
     <button
       className="py-2 px-4 w-fit bg-blue-600 rounded-lg text-white font-semibold hover:bg-blue-700 transition-colors duration-200 cursor-pointer shadow-sm"
       type={buttonType}
+      data-testid="add-task"
     >
       {children}
     </button>
