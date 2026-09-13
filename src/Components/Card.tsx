@@ -35,7 +35,7 @@ const Card = ({ task }: CardProps) => {
         {task.priority}
       </span>
       <div className="flex flex-col gap-2">
-        <h1 className="task-title text-xl font-bold text-white leading-tight">
+        <h1 className={`task-title text-xl font-bold text-white leading-tight ${task.status === "done" ? "line-through" : ""}`}>
           {task.title}
         </h1>
         {task.description && (

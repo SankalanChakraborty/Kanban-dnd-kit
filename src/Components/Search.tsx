@@ -60,6 +60,7 @@ const Search = () => {
         value={taskValue}
         placeholder="Add a Task item..."
         onChange={taskValueChangeHandler}
+        data-testid="task-name"
       />
 
       <input
@@ -68,6 +69,7 @@ const Search = () => {
         value={taskDescription}
         placeholder="Task Description..."
         onChange={taskDescriptionChangehandler}
+        data-testid="task-description"
       />
 
       <select

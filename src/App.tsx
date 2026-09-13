@@ -1,6 +1,5 @@
 import { DragDropProvider } from "@dnd-kit/react";
 import type { DragEndEvent } from "@dnd-kit/react";
-import "./App.css";
 import Column from "./Components/Column";
 import type { ColumnType } from "./interface";
 import Search from "./Components/Search";
@@ -31,10 +30,19 @@ function App() {
 
     const taskId = String(source.id);
     const newColumnId = String(target.id);
+    const newTaskStatus = columns.find((col) => col.id === newColumnId);
+
+    if (!newTaskStatus) return;
 
     setTasks((prevTasks) => {
       return prevTasks.map((task) => {
-        return task.id === taskId ? { ...task, columnId: newColumnId } : task;
+        return task.id === taskId
+          ? {
+              ...task,
+              columnId: newColumnId,
+              status: newTaskStatus?.title,
+            }
+          : task;
       });
     });
   };
