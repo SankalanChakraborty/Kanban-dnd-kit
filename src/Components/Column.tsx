@@ -12,7 +12,7 @@ const Column = ({ column }: columnProps) => {
   const { isDropTarget, ref } = useDroppable({ id: column.id });
 
   return (
-    <div className="todo-col flex-1 h-full p-6 bg-slate-800 rounded-lg flex flex-col gap-2 border border-slate-700 shadow-sm hover:shadow-md transition-shadow">
+    <div className="status-col flex-1 h-full p-6 bg-slate-800 rounded-lg flex flex-col gap-2 border border-slate-700 shadow-sm hover:shadow-md transition-shadow">
       <div className="column-heade flex justify-between">
         <span className="text-slate-200 text-sm uppercase font-semibold">
           {column.title}

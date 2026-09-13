@@ -65,7 +65,7 @@ describe("App Component", () => {
   it("renders Search component before columns", () => {
     const { container } = render(<App />);
     const search = screen.getByTestId("task-name");
-    const columns = container.querySelectorAll(".todo-col");
+    const columns = container.querySelectorAll(".status-col");
 
     expect(search).toBeInTheDocument();
     expect(columns.length).toBe(3);

@@ -72,7 +72,7 @@ describe("Column Component", () => {
   // ✅ Column Structure Test
   it("has correct container classes", () => {
     const { container } = render(<Column column={todoColumn} />);
-    const columnDiv = container.querySelector(".todo-col");
+    const columnDiv = container.querySelector(".status-col");
     expect(columnDiv?.classList.contains("bg-slate-800")).toBe(true);
     expect(columnDiv?.classList.contains("rounded-lg")).toBe(true);
   });
