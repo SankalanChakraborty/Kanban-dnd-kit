@@ -18,10 +18,15 @@ const Column = ({ column }: columnProps) => {
   return (
     <div className="status-col flex-1 h-full p-6 bg-slate-800 rounded-lg flex flex-col gap-2 border border-slate-700 shadow-sm hover:shadow-md transition-shadow">
       <div className="column-heade flex justify-between">
-        <span className="text-slate-200 text-sm uppercase font-semibold">
-          {column.title}
-        </span>
-        <button className="text-slate-400 text-xl hover:text-slate-300 transition-colors">
+        <div className="flex gap-4">
+          <span className="text-slate-200 text-sm uppercase font-semibold">
+            {column.title}
+          </span>
+          <span className="bg-blue-600 flex justify-center items-center rounded-full text-[10px] w-[18px] h-[18px] text-white">
+            {columnTasks.length}
+          </span>
+        </div>
+        <button className="text-slate-400 text-xl hover:text-slate-300 transition-colors hover:cursor-pointer">
           +
         </button>
       </div>

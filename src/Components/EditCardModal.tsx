@@ -82,7 +82,7 @@ const EditCardModal = () => {
             <option value="high">High Priority</option>
           </select>
           <RxCrossCircled
-            className="text-lg text-blue-500 hover: cursor-pointer"
+            className="text-lg text-blue-500 hover: cursor-pointer hover:scale-120 transition-all ease-linear"
             onClick={closeModal}
           />
         </div>
@@ -131,7 +131,7 @@ const EditCardModal = () => {
           <div className="asignee"></div>
         </div>
         <button
-          className="w-[150px] bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-sm text-sm text-white font-semibold"
+          className="w-[150px] bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-sm text-sm text-white font-semibold transition-all ease-linear hover:cursor-pointer"
           onClick={handleSave}
         >
           Save Changes
