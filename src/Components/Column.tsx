@@ -2,6 +2,7 @@ import { useTaskContext } from "../Context/TaskContext";
 import Card from "./Card";
 import type { ColumnType } from "../interface";
 import { useDroppable } from "@dnd-kit/react";
+import EmptyTask from "./EmptyTask";
 
 interface columnProps {
   column: ColumnType;
@@ -11,6 +12,7 @@ const Column = ({ column }: columnProps) => {
   const { tasks } = useTaskContext();
   const { isDropTarget, ref } = useDroppable({ id: column.id });
 
+  const columnTasks = tasks.filter((task) => task.columnId === column.id);
   return (
     <div className="status-col flex-1 h-full p-6 bg-slate-800 rounded-lg flex flex-col gap-2 border border-slate-700 shadow-sm hover:shadow-md transition-shadow">
       <div className="column-heade flex justify-between">
@@ -29,10 +31,10 @@ const Column = ({ column }: columnProps) => {
             : "border-slate-700 bg-slate-800"
         }`}
       >
-        {tasks.map((task) =>
-          task.columnId === column.id ? (
-            <Card key={task.id} task={task} />
-          ) : null,
+        {columnTasks.length > 0 ? (
+          columnTasks.map((task) => <Card key={task.id} task={task} />)
+        ) : (
+          <EmptyTask />
         )}
       </div>
     </div>

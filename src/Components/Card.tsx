@@ -7,6 +7,8 @@ interface CardProps {
 }
 
 const Card = ({ task }: CardProps) => {
+  const shortDesc = task.description?.substring(0, 45) + "...";
+
   const { ref } = useDraggable({
     id: task.id,
   });
@@ -26,7 +28,7 @@ const Card = ({ task }: CardProps) => {
 
   return (
     <div
-      className="card-container p-5 flex flex-col gap-4 w-56 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl shadow-lg border border-slate-700 hover:border-slate-600 hover:shadow-xl hover:cursor-grab transition-all duration-300"
+      className="card-container py-5 px-3 flex flex-col gap-4 w-56 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl shadow-lg border border-slate-700 hover:border-slate-600 hover:shadow-xl hover:cursor-grab transition-all duration-300"
       ref={ref}
     >
       <span
@@ -35,12 +37,14 @@ const Card = ({ task }: CardProps) => {
         {task.priority}
       </span>
       <div className="flex flex-col gap-2">
-        <h1 className={`task-title text-xl font-bold text-white leading-tight ${task.status === "done" ? "line-through" : ""}`}>
+        <h1
+          className={`task-title text-lg font-bold text-white leading-tight ${task.status === "done" ? "line-through" : ""}`}
+        >
           {task.title}
         </h1>
         {task.description && (
-          <span className="task-description text-slate-400 text-sm leading-relaxed">
-            {task.description}
+          <span className="task-description text-slate-400 text-xs leading-relaxed">
+            {task.description.length > 40 ? shortDesc : task.description}
           </span>
         )}
       </div>
