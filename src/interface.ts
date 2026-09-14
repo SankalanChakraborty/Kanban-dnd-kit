@@ -1,4 +1,4 @@
-type TaskType = "to do" | "in progress" | "done";
+export type TaskType = "to do" | "in progress" | "done";
 export type TaskPriority = "low" | "medium" | "high";
 export interface ColumnType {
   id: string;

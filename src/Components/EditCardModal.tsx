@@ -19,6 +19,10 @@ const EditCardModal = () => {
   const [newTaskPriority, setNewTaskPriority] = useState<TaskPriority>(
     selectedTask?.priority ?? "low",
   );
+  const [newColumnId, setNewColumnId] = useState(
+    selectedTask?.columnId ?? "todo",
+  );
+
   const handleTasKTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewTaskTitle(e.target.value);
   };
@@ -31,6 +35,10 @@ const EditCardModal = () => {
     e: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     setNewTaskPriority(e.target.value as TaskPriority);
+  };
+
+  const handleColumnChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setNewColumnId(e.target.value);
   };
 
   const closeModal = () => {
@@ -52,6 +60,7 @@ const EditCardModal = () => {
                 month: "short",
                 year: "numeric",
               }),
+              columnId: newColumnId,
             }
           : task,
       ),
@@ -98,9 +107,18 @@ const EditCardModal = () => {
         <div className="ticket-status w-full flex gap-5">
           <div className="status flex flex-col gap-2">
             <span className="text-gray-400 uppercase text-xs">Status</span>
-            <span className="text-white uppercase text-xs">
+            {/* <span className="text-white uppercase text-xs">
               {selectedTask?.status}
-            </span>
+            </span> */}
+            <select
+              className="px-4 py-2 rounded-lg outline-none border border-slate-700 text-slate-100 focus:border-blue-500 focus:shadow-sm focus:shadow-blue-900 text-xs"
+              value={newColumnId}
+              onChange={handleColumnChange}
+            >
+              <option value="todo">To Do</option>
+              <option value="in-progress">In Progress</option>
+              <option value="done">Done</option>
+            </select>
           </div>
           <div className="due-date flex flex-col justify-between gap-2">
             <span className="text-gray-400 uppercase text-xs">Due Date</span>

@@ -30,11 +30,13 @@ const Card = ({ task }: CardProps) => {
       ref={ref}
       onClick={handleCardClick}
     >
-      <span
-        className={`priority px-3 py-1 rounded-full text-[8px] text-white font-bold w-fit uppercase tracking-wider ${getPriorityBgColor(task.priority)} `}
-      >
-        {task.priority}
-      </span>
+      {task.status !== "done" ? (
+        <span
+          className={`priority px-3 py-1 rounded-full text-[8px] text-white font-bold w-fit uppercase tracking-wider ${getPriorityBgColor(task.priority)} `}
+        >
+          {task.priority}
+        </span>
+      ) : null}
       <div className="flex flex-col gap-2">
         <h1
           className={`task-title text-lg font-bold text-white leading-tight ${task.status === "done" ? "line-through" : ""}`}
