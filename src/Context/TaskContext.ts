@@ -4,6 +4,8 @@ import type { Task } from "../interface";
 interface TaskContextType {
   tasks: Task[];
   setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  selectedTask: Task | null;
+  setSelectedTask: React.Dispatch<React.SetStateAction<Task | null>>;
 }
 
 const TaskContext = createContext<TaskContextType | null>(null);

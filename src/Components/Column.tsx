@@ -10,9 +10,11 @@ interface columnProps {
 
 const Column = ({ column }: columnProps) => {
   const { tasks } = useTaskContext();
+
   const { isDropTarget, ref } = useDroppable({ id: column.id });
 
   const columnTasks = tasks.filter((task) => task.columnId === column.id);
+
   return (
     <div className="status-col flex-1 h-full p-6 bg-slate-800 rounded-lg flex flex-col gap-2 border border-slate-700 shadow-sm hover:shadow-md transition-shadow">
       <div className="column-heade flex justify-between">

@@ -4,6 +4,8 @@ import Column from "./Components/Column";
 import type { ColumnType } from "./interface";
 import Search from "./Components/Search";
 import { useTaskContext } from "./Context/TaskContext";
+import { useModalContext } from "./Context/ModalContext";
+import EditCardModal from "./Components/EditCardModal";
 
 const columns: ColumnType[] = [
   {
@@ -21,6 +23,7 @@ const columns: ColumnType[] = [
 ];
 function App() {
   const { setTasks } = useTaskContext();
+  const { isModalOpen } = useModalContext();
 
   const handleDragEnd = (event: DragEndEvent) => {
     if (event.canceled) return;
@@ -49,6 +52,7 @@ function App() {
 
   return (
     <div className="container w-full h-full bg-slate-900 py-8 px-16 flex flex-col gap-8">
+      {isModalOpen ? <EditCardModal /> : null}
       <h1 className="app-heading text-4xl font-bold text-slate-100">
         Kanban board
       </h1>
