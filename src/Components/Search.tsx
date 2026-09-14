@@ -1,14 +1,16 @@
 import { useState } from "react";
 import Button from "./Button";
 import { useTaskContext } from "../Context/TaskContext";
-import type { Task } from "../interface";
+import type { Task, TaskPriority } from "../interface";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 const Search = () => {
   const [taskValue, setTaskValue] = useState("");
   const [taskDescription, setTaskDescription] = useState("");
-  const [taskPriority, setTaskPriority] = useState<"low" | "medium" | "high">(
-    "medium",
-  );
+  const [taskPriority, setTaskPriority] = useState<TaskPriority>("medium");
+  const [dueDate, setDueDate] = useState<Date | null>(new Date());
   const { setTasks } = useTaskContext();
 
   const taskValueChangeHandler = (
@@ -39,9 +41,14 @@ const Search = () => {
       description: taskDescription,
       status: "to do",
       priority: taskPriority,
+      dueDate: dueDate?.toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      }),
       createdAt: new Date().toLocaleDateString("en-IN", {
         day: "numeric",
-        month: "long",
+        month: "short",
         year: "numeric",
       }),
       columnId: "todo",
@@ -62,7 +69,6 @@ const Search = () => {
         onChange={taskValueChangeHandler}
         data-testid="task-name"
       />
-
       <input
         className="w-2xs py-2 px-4 text-sm bg-slate-800 text-slate-100 placeholder-slate-500 outline-none border border-slate-700 rounded-lg transition-all ease-in-out focus:border-blue-500 focus:shadow-sm focus:shadow-blue-900"
         type="text"
@@ -71,7 +77,6 @@ const Search = () => {
         onChange={taskDescriptionChangehandler}
         data-testid="task-description"
       />
-
       <select
         className="px-4 py-2 rounded-lg outline-none border border-slate-700 text-slate-100 focus:border-blue-500 focus:shadow-sm focus:shadow-blue-900 text-xs"
         value={taskPriority}
@@ -81,8 +86,12 @@ const Search = () => {
         <option value="medium">Medium Priority</option>
         <option value="high">High Priority</option>
       </select>
-
-      <Button buttonType="submit">Add Item</Button>
+      <DatePicker
+        className="px-4 py-2 rounded-lg outline-none border border-slate-700 text-slate-100 focus:border-blue-500 focus:shadow-sm focus:shadow-blue-900 text-xs"
+        selected={dueDate}
+        onChange={(date: Date | null) => setDueDate(date)}
+      />
+      ;<Button buttonType="submit">Add Item</Button>
     </form>
   );
 };

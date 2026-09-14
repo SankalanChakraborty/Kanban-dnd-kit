@@ -22,7 +22,7 @@ const columns: ColumnType[] = [
   },
 ];
 function App() {
-  const { setTasks } = useTaskContext();
+  const { setTasks, selectedTask } = useTaskContext();
   const { isModalOpen } = useModalContext();
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -52,7 +52,7 @@ function App() {
 
   return (
     <div className="container w-full h-full bg-slate-900 py-8 px-16 flex flex-col gap-8">
-      {isModalOpen ? <EditCardModal /> : null}
+      {isModalOpen ? <EditCardModal key={selectedTask?.id} /> : null}
       <h1 className="app-heading text-4xl font-bold text-slate-100">
         Kanban board
       </h1>
