@@ -51,7 +51,7 @@ describe("App Component", () => {
   // ✅ Layout Structure Tests
   it("renders main container with correct styling", () => {
     const { container } = render(<App />);
-    const mainContainer = container.querySelector(".container");
+    const mainContainer = container.querySelector(".app-container");
     expect(mainContainer?.classList.contains("bg-slate-900")).toBe(true);
   });
 

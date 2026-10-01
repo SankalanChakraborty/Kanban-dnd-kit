@@ -1,9 +1,14 @@
 import React, { ReactElement } from "react";
 import { render, RenderOptions } from "@testing-library/react";
 import TaskContextProvider from "../Context/TaskContextProvider";
+import ModalContextProvider from "../Context/ModalContextProvider";
 
 const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
-  return <TaskContextProvider>{children}</TaskContextProvider>;
+  return (
+    <TaskContextProvider>
+      <ModalContextProvider>{children}</ModalContextProvider>
+    </TaskContextProvider>
+  );
 };
 
 const customRender = (

@@ -5,7 +5,7 @@ const EmptyTask = () => {
       <ImFileEmpty className="text-slate-300" />
       <div className="description flex flex-col justify-center items-center">
         <span className="font-medium text-sm text-slate-200">No tasks yet</span>
-        <span className="text-slate-400">
+        <span className="text-slate-400 text-center">
           Drag a card here or click + to add one
         </span>
       </div>

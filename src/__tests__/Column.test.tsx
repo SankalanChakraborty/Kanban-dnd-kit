@@ -44,6 +44,17 @@ describe("Column Component", () => {
     expect(screen.getByText("done")).toBeInTheDocument();
   });
 
+  // it("renders number of tasks in the column", () => {
+  //   const { rerender } = render(<Column column={todoColumn} />);
+  //   expect(screen.getByTestId("task-count")).toBeInTheDocument();
+
+  //   rerender(<Column column={inProgressColumn} />);
+  //   expect(screen.getByTestId("task-count")).toBeInTheDocument();
+
+  //   rerender(<Column column={doneColumn} />);
+  //   expect(screen.getByTestId("task-count")).toBeInTheDocument();
+  // });
+
   it("renders plus button", () => {
     render(<Column column={todoColumn} />);
     expect(screen.getByRole("button", { name: "+" })).toBeInTheDocument();
