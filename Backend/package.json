@@ -20,5 +20,12 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.10.3",
     "nodemon": "^3.1.14"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.10",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/node": "^26.6.3",
+    "typescript": "^7.0.2"
   }
 }
