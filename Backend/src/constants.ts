@@ -1,1 +1,2 @@
-export const API_BASE_URL: string = "http://localhost:8080/api";
+export const USER_BASE_URL: string = "/api/users";
+export const TASK_BASE_URL: string = "/api/tasks";
