@@ -60,10 +60,7 @@ const Search = () => {
   };
 
   return (
-    <form
-      className="w-full flex gap-2 justify-center items-center"
-      onSubmit={submitHandler}
-    >
+    <form className="w-full flex gap-2 items-end" onSubmit={submitHandler}>
       <div className="flex flex-col gap-2">
         <input
           className="w-2xs py-2 px-4 text-sm bg-slate-800 text-slate-100 placeholder-slate-500 outline-none border border-slate-700 rounded-lg transition-all ease-in-out focus:border-blue-500 focus:shadow-sm focus:shadow-blue-900"
@@ -82,21 +79,27 @@ const Search = () => {
           data-testid="task-description"
         />
       </div>
-      <select
-        className="px-4 py-2 rounded-lg outline-none border border-slate-700 text-slate-100 focus:border-blue-500 focus:shadow-sm focus:shadow-blue-900 text-xs"
-        value={taskPriority}
-        onChange={taskPriorityChangeHandler}
-      >
-        <option value="low">Low Priority</option>
-        <option value="medium">Medium Priority</option>
-        <option value="high">High Priority</option>
-      </select>
-      <DatePicker
-        className="px-4 py-2 rounded-lg outline-none border border-slate-700 text-slate-100 focus:border-blue-500 focus:shadow-sm focus:shadow-blue-900 text-xs"
-        selected={dueDate}
-        onChange={(date: Date | null) => setDueDate(date)}
-      />
-      ;<Button buttonType="submit">Add Item</Button>
+      <div className="flex flex-col gap-2">
+        <span className="text-slate-100 text-sm px-2">Priority</span>
+        <select
+          className="px-4 py-2 rounded-lg outline-none border border-slate-700 text-slate-100 focus:border-blue-500 focus:shadow-sm focus:shadow-blue-900 text-xs"
+          value={taskPriority}
+          onChange={taskPriorityChangeHandler}
+        >
+          <option value="low">Low Priority</option>
+          <option value="medium">Medium Priority</option>
+          <option value="high">High Priority</option>
+        </select>
+      </div>
+      <div className="flex flex-col gap-2">
+        <span className="text-slate-100 text-sm px-2">Due date</span>
+        <DatePicker
+          className="px-4 py-2 rounded-lg outline-none border border-slate-700 text-slate-100 focus:border-blue-500 focus:shadow-sm focus:shadow-blue-900 text-xs"
+          selected={dueDate}
+          onChange={(date: Date | null) => setDueDate(date)}
+        />
+      </div>
+      <Button buttonType="submit">Add Item</Button>
     </form>
   );
 };
