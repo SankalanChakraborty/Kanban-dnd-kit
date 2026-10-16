@@ -1,10 +1,17 @@
 import type { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
-import type { JwtPayload } from "jsonwebtoken";
+import jwt, { type JwtPayload } from "jsonwebtoken";
 
 export interface AuthenticatedRequest extends Request {
-  user?: JwtPayload;
+  user?: JwtPayload & { id: string };
 }
+
+const sendUnauthorized = (
+  res: Response,
+  message: string,
+  code?: string,
+): void => {
+  res.status(401).json({ message, ...(code && { code }) });
+};
 
 const authMiddleware = (
   req: AuthenticatedRequest,
@@ -13,7 +20,7 @@ const authMiddleware = (
 ): void => {
   const accessToken = req.cookies?.accessToken;
   if (!accessToken) {
-    res.status(401).json({ message: "Unauthorized, no access token provided" });
+    sendUnauthorized(res, "Unauthorized, no access token provided");
     return;
   }
 
@@ -29,21 +36,27 @@ const authMiddleware = (
     decoded = jwt.verify(accessToken, secret, { algorithms: ["HS256"] });
   } catch (error) {
     if (error instanceof jwt.TokenExpiredError) {
-      res
-        .status(401)
-        .json({ message: "Access token expired", code: "TOKEN_EXPIRED" });
-      return;
+      sendUnauthorized(res, "Access token expired", "TOKEN_EXPIRED");
+    } else {
+      sendUnauthorized(res, "Invalid access token");
     }
-    res.status(401).json({ message: "Invalid access token" });
     return;
   }
 
   if (typeof decoded === "string") {
-    res.status(401).json({ message: "Invalid token payload" });
+    sendUnauthorized(res, "Invalid token payload");
     return;
   }
 
-  req.user = decoded;
+  const userId = [decoded.id, decoded.userID].find(
+    (value): value is string => typeof value === "string",
+  );
+  if (!userId) {
+    sendUnauthorized(res, "Invalid token payload");
+    return;
+  }
+
+  req.user = { ...decoded, id: userId };
   next();
 };
 

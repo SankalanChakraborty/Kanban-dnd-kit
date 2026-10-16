@@ -1,7 +1,11 @@
 import { render, screen } from "../test/test-utils";
 import Search from "../Components/Search";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
+
+vi.mock("../api/task", () => ({
+  createTask: vi.fn().mockResolvedValue({}),
+}));
 
 describe("Search", () => {
   it("renders the all input fields", () => {

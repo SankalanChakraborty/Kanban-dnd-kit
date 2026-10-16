@@ -11,14 +11,14 @@ export const secret = (name: string): string => {
 };
 
 export const signAccessToken = (userID: string) => {
-  return jwt.sign({ userID }, secret("ACCESS_TOKEN_SECRET"), {
+  return jwt.sign({ id: userID }, secret("ACCESS_TOKEN_SECRET"), {
     algorithm: "HS256",
     expiresIn: "15m",
   });
 };
 
 export const signRefreshToken = (userID: string) => {
-  return jwt.sign({ userID }, secret("REFRESH_TOKEN_SECRET"), {
+  return jwt.sign({ id: userID }, secret("REFRESH_TOKEN_SECRET"), {
     algorithm: "HS256",
     expiresIn: "7d",
     jwtid: crypto.randomUUID(),

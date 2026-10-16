@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from "./Button";
 import { useTaskContext } from "../Context/TaskContext";
 import type { Task, TaskPriority } from "../interface";
+import { createTask } from "../api/task";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -31,7 +32,7 @@ const Search = () => {
     setTaskPriority(event.target.value as "low" | "medium" | "high");
   };
 
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!taskValue) return;
 
@@ -53,6 +54,8 @@ const Search = () => {
       }),
       columnId: "todo",
     };
+    const data = await createTask(newTask);
+    console.log(data);
     setTasks((prevtasks) => [...prevtasks, newTask]);
     setTaskValue("");
     setTaskDescription("");

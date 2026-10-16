@@ -104,13 +104,11 @@ export const updateTask = async (req: AuthenticatedRequest, res: Response) => {
       { status, title, description, priority },
       { new: true },
     );
-    res
-      .status(200)
-      .json({
-        status: "success",
-        message: "Task updated successfully",
-        task: updatedTask,
-      });
+    res.status(200).json({
+      status: "success",
+      message: "Task updated successfully",
+      task: updatedTask,
+    });
   } catch (error) {
     res.status(500).json({ status: "error", message: "Error updating task" });
   }
@@ -138,6 +136,8 @@ export const deleteTask = async (req: AuthenticatedRequest, res: Response) => {
       message: "Task deleted successfully",
     });
   } catch (error) {
-    return res.status(500).json({ status: "error", message: "Error deleting task" });
+    return res
+      .status(500)
+      .json({ status: "error", message: "Error deleting task" });
   }
 };
