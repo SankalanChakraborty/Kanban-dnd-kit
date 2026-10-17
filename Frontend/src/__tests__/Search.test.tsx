@@ -2,10 +2,17 @@ import { render, screen } from "../test/test-utils";
 import Search from "../Components/Search";
 import { describe, it, expect, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
+import { useTaskContext } from "../Context/TaskContext";
 
 vi.mock("../api/task", () => ({
-  createTask: vi.fn().mockResolvedValue({}),
+  createTask: vi.fn().mockImplementation(async (task: unknown) => ({ task })),
+  getTasksFromDb: vi.fn().mockResolvedValue({ tasks: [] }),
 }));
+
+const TaskTitles = () => {
+  const { tasks } = useTaskContext();
+  return <div>{tasks.map((task) => <span key={task.id}>{task.title}</span>)}</div>;
+};
 
 describe("Search", () => {
   it("renders the all input fields", () => {
@@ -77,6 +84,21 @@ describe("Search", () => {
 
     expect(taskInput.value).toBe("");
     expect(descInput.value).toBe("");
+  });
+
+  it("shows a created task immediately without reloading", async () => {
+    const user = userEvent.setup();
+    render(
+      <>
+        <Search />
+        <TaskTitles />
+      </>,
+    );
+
+    await user.type(screen.getByTestId("task-name"), "New task");
+    await user.click(screen.getByRole("button", { name: /Add Item/i }));
+
+    expect(await screen.findByText("New task")).toBeInTheDocument();
   });
 
   it("resets priority dropdown to low after submission", async () => {

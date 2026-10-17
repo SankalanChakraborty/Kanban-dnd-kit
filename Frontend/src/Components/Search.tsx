@@ -54,9 +54,9 @@ const Search = () => {
       }),
       columnId: "todo",
     };
-    const data = await createTask(newTask);
-    console.log(data);
-    setTasks((prevtasks) => [...prevtasks, newTask]);
+    const { task } = await createTask(newTask);
+
+    setTasks((currentTasks) => [...currentTasks, task]);
     setTaskValue("");
     setTaskDescription("");
     setTaskPriority("low");

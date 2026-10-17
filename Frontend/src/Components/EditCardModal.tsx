@@ -4,7 +4,8 @@ import getPriorityBgColor from "../utils/getPriorityBgColor";
 import { RxCrossCircled } from "react-icons/rx";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
-import type { TaskPriority } from "../interface";
+import type { Task, TaskPriority } from "../interface";
+import { updateTask } from "../api/task";
 
 const EditCardModal = () => {
   const { selectedTask, setSelectedTask, setTasks } = useTaskContext();
@@ -46,7 +47,7 @@ const EditCardModal = () => {
     setIsModalOpen(false);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
         task.id === selectedTask?.id
@@ -65,11 +66,13 @@ const EditCardModal = () => {
           : task,
       ),
     );
+    const data = await updateTask(selectedTask as Task);
+    console.log(data);
     closeModal();
   };
 
   return (
-    <div className="modal-container flex flex-col justify-center items-center absolute top-0 left-0 w-full h-full p-4 sm:p-8 bg-gray-950/70">
+    <div className="modal-container flex flex-col justify-center items-center absolute top-0 left-0 w-full h-full p-4 z-999 sm:p-8 bg-gray-950/70">
       <div className="edit-card bg-gray-950 w-full max-w-lg max-h-[85vh] overflow-y-auto px-8 py-5 rounded-xl flex flex-col gap-4 justify-center items-center">
         <div className="priority-and-close-modal flex justify-between w-full">
           <select

@@ -1,8 +1,20 @@
 import type { Task } from "../interface";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_TASK_API_BASE_URL;
 
-const getApiHeaders = () => {
+interface TasksResponse {
+  status: string;
+  message: string;
+  tasks: Task[];
+}
+
+interface CreateTaskResponse {
+  status: string;
+  message: string;
+  task: Task;
+}
+
+export const getApiHeaders = () => {
   return {
     headers: {
       Accept: "application/json",
@@ -11,7 +23,7 @@ const getApiHeaders = () => {
   };
 };
 
-export const getTasks = async (): Promise<Task> => {
+export const getTasksFromDb = async (): Promise<TasksResponse> => {
   const response = await fetch(`${API_BASE_URL}/get-tasks`, {
     method: "GET",
     credentials: "include",
@@ -26,7 +38,7 @@ export const getTasks = async (): Promise<Task> => {
   return response.json();
 };
 
-export const createTask = async (task: Task): Promise<Task> => {
+export const createTask = async (task: Task): Promise<CreateTaskResponse> => {
   const { headers } = getApiHeaders();
   const response = await fetch(`${API_BASE_URL}/create-task`, {
     method: "POST",
@@ -42,5 +54,22 @@ export const createTask = async (task: Task): Promise<Task> => {
     );
   }
 
+  return response.json();
+};
+
+export const updateTask = async (task: Task): Promise<TasksResponse> => {
+  const { headers } = getApiHeaders();
+  const { id } = task;
+  const response = await fetch(`${API_BASE_URL}/update-task/${id}`, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(task),
+  });
+  if (!response.ok) {
+    const errorBody = await response.text();
+    throw new Error(
+      `Failed to update task (${response.status})${errorBody ? `: ${errorBody}` : ""}`,
+    );
+  }
   return response.json();
 };
