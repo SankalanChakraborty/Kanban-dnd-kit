@@ -1,8 +1,10 @@
 import { createContext, useContext } from "react";
 
 interface UserContextType {
-  isLoggedIn: boolean;
-  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  isAuthenticated: boolean;
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
+  isLoading: boolean;
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const UserContext = createContext<UserContextType | null>(null);

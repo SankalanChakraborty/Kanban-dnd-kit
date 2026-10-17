@@ -4,8 +4,10 @@ import { useModalContext } from "../Context/ModalContext";
 import Search from "./Search";
 import EditCardModal from "./EditCardModal";
 import Column from "./Column";
-import type { ColumnType } from "../interface";
+import type { ColumnType, Task } from "../interface";
 import { useUserContext } from "../Context/UserContext";
+import Spinner from "./Spinner";
+import { updateTask } from "../api/task";
 
 const columns: ColumnType[] = [
   {
@@ -23,11 +25,19 @@ const columns: ColumnType[] = [
 ];
 
 const Homepage = () => {
-  const { isLoggedIn } = useUserContext();
-  const { setTasks, selectedTask } = useTaskContext();
+  const { isAuthenticated, isLoading } = useUserContext();
+  const { tasks, setTasks, selectedTask } = useTaskContext();
   const { isModalOpen } = useModalContext();
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  if (isLoading) {
+    return (
+      <div className="w-full h-full flex justify-center items-center bg-[linear-gradient(135deg,#020617_0%,#0f172a_55%,#1e293b_100%)]">
+        <Spinner />
+      </div>
+    );
+  }
+
+  const handleDragEnd = async (event: DragEndEvent) => {
     if (event.canceled) return;
     const { operation } = event;
     const { source, target } = operation;
@@ -50,27 +60,37 @@ const Homepage = () => {
           : task;
       });
     });
+    const taskToUpdate = tasks.find((task) => task.id === taskId);
+    if (!taskToUpdate) return;
+
+    const updatedTask: Task = {
+      ...taskToUpdate,
+      columnId: newColumnId,
+      status: newTaskStatus.title,
+    };
+    const data = await updateTask(updatedTask);
+    console.log(data);
   };
 
-  return isLoggedIn ? (
-    <div className="app-container w-full min-h-screen bg-slate-900 py-8 px-16">
-      <div className="mx-auto flex max-w-6xl flex-col gap-8">
-        {isModalOpen ? <EditCardModal key={selectedTask?.id} /> : null}
-        <h1 className="app-heading text-4xl font-bold text-slate-100">
-          Kanban board
-        </h1>
-        <Search />
-        <DragDropProvider onDragEnd={handleDragEnd}>
-          <div className="columns-container grid grid-cols-1 gap-6 md:grid-cols-3 items-start">
-            {columns.map((column) => (
-              <Column key={column.id} column={column} />
-            ))}
-          </div>
-        </DragDropProvider>
+  return (
+    isAuthenticated && (
+      <div className="app-container w-full min-h-screen bg-[linear-gradient(135deg,#020617_0%,#0f172a_55%,#1e293b_100%)] py-8 px-16">
+        <div className="mx-auto flex max-w-6xl flex-col gap-8">
+          {isModalOpen ? <EditCardModal key={selectedTask?.id} /> : null}
+          <h1 className="app-heading text-4xl font-bold text-slate-100">
+            Kanban board
+          </h1>
+          <Search />
+          <DragDropProvider onDragEnd={handleDragEnd}>
+            <div className="columns-container grid grid-cols-1 gap-6 md:grid-cols-3 items-start">
+              {columns.map((column) => (
+                <Column key={column.id} column={column} />
+              ))}
+            </div>
+          </DragDropProvider>
+        </div>
       </div>
-    </div>
-  ) : (
-    <span>401 unauthorized</span>
+    )
   );
 };
 

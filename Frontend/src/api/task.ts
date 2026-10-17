@@ -8,6 +8,12 @@ interface TasksResponse {
   tasks: Task[];
 }
 
+interface TaskResponse {
+  status: string;
+  message: string;
+  task: Task;
+}
+
 interface CreateTaskResponse {
   status: string;
   message: string;
@@ -57,11 +63,13 @@ export const createTask = async (task: Task): Promise<CreateTaskResponse> => {
   return response.json();
 };
 
-export const updateTask = async (task: Task): Promise<TasksResponse> => {
+export const updateTask = async (task: Task): Promise<TaskResponse> => {
   const { headers } = getApiHeaders();
   const { id } = task;
+  console.log("Update task>>>>>>>>>", id);
   const response = await fetch(`${API_BASE_URL}/update-task/${id}`, {
     method: "PUT",
+    credentials: "include",
     headers,
     body: JSON.stringify(task),
   });

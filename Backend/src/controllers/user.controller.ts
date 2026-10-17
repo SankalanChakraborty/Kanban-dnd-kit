@@ -217,3 +217,18 @@ export const rotateToken = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Error refreshing token" });
   }
 };
+
+export const getCurrentUser = async (req: Request, res: Response) => {
+  const { id } = (req as Request & { user: { id: string } }).user;
+  try {
+    const user = await User.findOne({ _id: id }, { _id: 1, name: 1, email: 1 });
+    // console.log(user);
+    return res.json({
+      status: "success",
+      isAuthenticated: true,
+      user,
+    });
+  } catch (error) {
+    throw new Error("Either user doesn't exist or is not authenticated");
+  }
+};

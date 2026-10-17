@@ -74,23 +74,33 @@ export const getTasks = async (req: Request, res: Response) => {
 
 export const updateTask = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { status, title, description, priority } = req.body as {
+    const { status, title, description, priority, dueDate, columnId } = req.body as {
       status?: string;
       title?: string;
       description?: string;
       priority?: string;
+      dueDate?: string;
+      columnId?: string;
     };
-    if (!status && !title && !description && !priority) {
+    if (
+      status === undefined &&
+      title === undefined &&
+      description === undefined &&
+      priority === undefined &&
+      dueDate === undefined &&
+      columnId === undefined
+    ) {
       return res
         .status(400)
         .json({ status: "error", message: "No fields to update" });
     }
-    const { taskID } = req.params;
+    const { taskId } = req.params;
     const user = req.user?.id;
     if (!user) {
       return res.status(401).json({ status: "error", message: "Unauthorized" });
     }
-    const task = await Task.findOne({ id: taskID, user });
+    console.log("Update task>>>>>>>", taskId);
+    const task = await Task.findOne({ id: taskId, user });
     if (!task) {
       return res
         .status(404)
@@ -98,10 +108,10 @@ export const updateTask = async (req: AuthenticatedRequest, res: Response) => {
     }
     const updatedTask = await Task.findOneAndUpdate(
       {
-        id: taskID,
+        id: taskId,
         user,
       },
-      { status, title, description, priority },
+      { status, title, description, priority, dueDate, columnId },
       { new: true },
     );
     res.status(200).json({

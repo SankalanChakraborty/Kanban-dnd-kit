@@ -10,7 +10,9 @@ const sendUnauthorized = (
   message: string,
   code?: string,
 ): void => {
-  res.status(401).json({ message, ...(code && { code }) });
+  res
+    .status(401)
+    .json({ isAuthenticated: false, message, ...(code && { code }) });
 };
 
 const authMiddleware = (

@@ -46,7 +46,7 @@ interface SignUpErrors {
 
 export default function Login() {
   const navigate = useNavigate();
-  const { setIsLoggedIn } = useUserContext();
+  const { setIsAuthenticated, setIsLoading } = useUserContext();
   // Theme state
   const [isDark, setIsDark] = useState(true);
 
@@ -187,7 +187,8 @@ export default function Login() {
     const data = await login(signInData.emailOrUser, signInData.password);
     console.log(data);
     if (data.status === "success") {
-      setIsLoggedIn(true);
+      setIsAuthenticated(true);
+      setIsLoading(false);
       navigate("/");
       setIsSigningIn(true);
       setTimeout(() => {
