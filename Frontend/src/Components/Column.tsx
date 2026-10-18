@@ -48,7 +48,7 @@ const Column = ({ column }: columnProps) => {
     //   </div>
     // </div>
 
-    <div className="status-col flex-1 h-full min-w-[280px] p-4 sm:p-5 rounded-2xl bg-slate-900/60 backdrop-blur-md border border-slate-800/80 shadow-lg shadow-black/20 flex flex-col gap-3 transition-colors duration-200">
+    <div className="status-col flex-1 h-full p-4 sm:p-5 rounded-2xl bg-slate-900/60 backdrop-blur-md border border-slate-800/80 shadow-lg shadow-black/20 flex flex-col gap-3 transition-colors duration-200">
       {/* Column Header */}
       <div className="column-header flex items-center justify-between pb-3 border-b border-slate-800/70">
         <div className="flex items-center gap-2.5">

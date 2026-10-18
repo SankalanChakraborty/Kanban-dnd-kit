@@ -26,7 +26,7 @@ const Card = ({ task }: CardProps) => {
 
   return (
     <div
-      className="card-container group relative flex flex-col justify-between w-64 p-4 rounded-2xl bg-slate-900/80 backdrop-blur-md border border-slate-700/60 shadow-lg shadow-black/30 hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-1 hover:cursor-grab active:cursor-grabbing transition-all duration-300 ease-out"
+      className="card-container group relative flex flex-col justify-between max-w-60 p-4 rounded-2xl bg-slate-900/80 backdrop-blur-md border border-slate-700/60 shadow-lg shadow-black/30 hover:border-indigo-500/50 hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-1 hover:cursor-grab active:cursor-grabbing transition-all duration-300 ease-out"
       ref={ref}
       onClick={handleCardClick}
     >

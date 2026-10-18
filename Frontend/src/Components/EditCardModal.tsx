@@ -118,7 +118,7 @@ const EditCardModal = () => {
             <input
               type="text"
               placeholder="Task title..."
-              className="w-full text-xl font-bold text-white placeholder-slate-500 bg-slate-800/60 border border-slate-700/70 rounded-xl px-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all capitalize"
+              className="w-full text-xl font-bold text-white placeholder-slate-500 bg-slate-800/60 border border-slate-700/70 rounded-xl px-3.5 py-2.5 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
               value={newTaskTitle}
               onChange={handleTasKTitleChange}
             />

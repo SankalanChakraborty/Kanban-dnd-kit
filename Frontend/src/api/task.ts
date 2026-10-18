@@ -1,4 +1,5 @@
 import type { Task } from "../interface";
+import { authenticatedFetch } from "./authenticatedFetch";
 
 const API_BASE_URL = import.meta.env.VITE_TASK_API_BASE_URL;
 
@@ -30,9 +31,8 @@ export const getApiHeaders = () => {
 };
 
 export const getTasksFromDb = async (): Promise<TasksResponse> => {
-  const response = await fetch(`${API_BASE_URL}/get-tasks`, {
+  const response = await authenticatedFetch(`${API_BASE_URL}/get-tasks`, {
     method: "GET",
-    credentials: "include",
   });
   if (!response.ok) {
     const errorBody = await response.text();
@@ -46,9 +46,8 @@ export const getTasksFromDb = async (): Promise<TasksResponse> => {
 
 export const createTask = async (task: Task): Promise<CreateTaskResponse> => {
   const { headers } = getApiHeaders();
-  const response = await fetch(`${API_BASE_URL}/create-task`, {
+  const response = await authenticatedFetch(`${API_BASE_URL}/create-task`, {
     method: "POST",
-    credentials: "include",
     headers,
     body: JSON.stringify(task),
   });
@@ -67,9 +66,8 @@ export const updateTask = async (task: Task): Promise<TaskResponse> => {
   const { headers } = getApiHeaders();
   const { id } = task;
   console.log("Update task>>>>>>>>>", id);
-  const response = await fetch(`${API_BASE_URL}/update-task/${id}`, {
+  const response = await authenticatedFetch(`${API_BASE_URL}/update-task/${id}`, {
     method: "PUT",
-    credentials: "include",
     headers,
     body: JSON.stringify(task),
   });

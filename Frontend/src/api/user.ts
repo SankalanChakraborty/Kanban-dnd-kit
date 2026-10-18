@@ -1,4 +1,5 @@
 import { getApiHeaders } from "./task";
+import { authenticatedFetch } from "./authenticatedFetch";
 
 interface User {
   id: string;
@@ -41,9 +42,8 @@ export const login = async (
 };
 
 export const getCurrentUser = async (): Promise<CurrentUserResponse> => {
-  const response = await fetch(`${API_BASE_URL}/auth/me`, {
+  const response = await authenticatedFetch(`${API_BASE_URL}/auth/me`, {
     method: "GET",
-    credentials: "include",
   });
   if (!response.ok) {
     const errorBody = await response.text();

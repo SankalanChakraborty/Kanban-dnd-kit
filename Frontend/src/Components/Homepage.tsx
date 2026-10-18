@@ -74,7 +74,7 @@ const Homepage = () => {
 
   return (
     isAuthenticated && (
-      <div className="app-container w-full min-h-screen bg-[linear-gradient(135deg,#020617_0%,#0f172a_55%,#1e293b_100%)] py-8 px-16">
+      <div className="app-container w-full min-h-screen bg-[linear-gradient(135deg,#020617_0%,#0f172a_55%,#1e293b_100%)] py-4 px-4 sm:py-6 sm:px-8 lg:py-8 lg:px-16">
         <div className="mx-auto flex max-w-6xl flex-col gap-8">
           {isModalOpen ? <EditCardModal key={selectedTask?.id} /> : null}
           <h1 className="app-heading text-4xl font-bold text-slate-100">

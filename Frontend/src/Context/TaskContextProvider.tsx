@@ -10,12 +10,20 @@ const TaskContextProvider = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useUserContext();
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      return;
+    }
+
     const fetchTasks = async () => {
-      const data = await getTasksFromDb();
-      console.log(data);
-      setTasks(data.tasks);
+      try {
+        const data = await getTasksFromDb();
+        setTasks(data.tasks);
+      } catch (error) {
+        console.error("Failed to fetch tasks:", error);
+      }
     };
-    fetchTasks();
+
+    void fetchTasks();
   }, [isAuthenticated]);
 
   return (
