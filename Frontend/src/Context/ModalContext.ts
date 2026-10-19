@@ -1,8 +1,13 @@
 import { createContext, useContext } from "react";
+import type { ColumnType } from "../interface";
 
 interface ModalProps {
-  isModalOpen: boolean;
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isEditCardModalOpen: boolean;
+  setIsEditCardModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isAddTaskModalOpen: boolean;
+  setIsAddTaskModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  addTaskColumn: ColumnType | null;
+  setAddTaskColumn: React.Dispatch<React.SetStateAction<ColumnType | null>>;
 }
 
 const ModalContext = createContext<ModalProps | null>(null);

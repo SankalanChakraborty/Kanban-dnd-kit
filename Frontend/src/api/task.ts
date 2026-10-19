@@ -31,51 +31,74 @@ export const getApiHeaders = () => {
 };
 
 export const getTasksFromDb = async (): Promise<TasksResponse> => {
-  const response = await authenticatedFetch(`${API_BASE_URL}/get-tasks`, {
-    method: "GET",
-  });
-  if (!response.ok) {
-    const errorBody = await response.text();
+  try {
+    const response = await authenticatedFetch(`${API_BASE_URL}/get-tasks`, {
+      method: "GET",
+    });
+    if (!response.ok) {
+      const errorBody = await response.text();
+      throw new Error(
+        `Failed to fetch tasks (${response.status})${errorBody ? `: ${errorBody}` : ""}`,
+      );
+    }
+
+    return response.json();
+  } catch (error) {
     throw new Error(
-      `Failed to fetch tasks (${response.status})${errorBody ? `: ${errorBody}` : ""}`,
+      `Could not fetch tasks: ${error instanceof Error ? error.message : String(error)}`,
+      { cause: error },
     );
   }
-
-  return response.json();
 };
 
 export const createTask = async (task: Task): Promise<CreateTaskResponse> => {
-  const { headers } = getApiHeaders();
-  const response = await authenticatedFetch(`${API_BASE_URL}/create-task`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(task),
-  });
+  try {
+    const { headers } = getApiHeaders();
+    const response = await authenticatedFetch(`${API_BASE_URL}/create-task`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(task),
+    });
 
-  if (!response.ok) {
-    const errorBody = await response.text();
+    if (!response.ok) {
+      const errorBody = await response.text();
+      throw new Error(
+        `Failed to create task (${response.status})${errorBody ? `: ${errorBody}` : ""}`,
+      );
+    }
+
+    return response.json();
+  } catch (error) {
     throw new Error(
-      `Failed to create task (${response.status})${errorBody ? `: ${errorBody}` : ""}`,
+      `Could not create task: ${error instanceof Error ? error.message : String(error)}`,
+      { cause: error },
     );
   }
-
-  return response.json();
 };
 
 export const updateTask = async (task: Task): Promise<TaskResponse> => {
-  const { headers } = getApiHeaders();
-  const { id } = task;
-  console.log("Update task>>>>>>>>>", id);
-  const response = await authenticatedFetch(`${API_BASE_URL}/update-task/${id}`, {
-    method: "PUT",
-    headers,
-    body: JSON.stringify(task),
-  });
-  if (!response.ok) {
-    const errorBody = await response.text();
+  try {
+    const { headers } = getApiHeaders();
+    const { id } = task;
+    const response = await authenticatedFetch(
+      `${API_BASE_URL}/update-task/${id}`,
+      {
+        method: "PUT",
+        headers,
+        body: JSON.stringify(task),
+      },
+    );
+    if (!response.ok) {
+      const errorBody = await response.text();
+      throw new Error(
+        `Failed to update task (${response.status})${errorBody ? `: ${errorBody}` : ""}`,
+      );
+    }
+    return response.json();
+  } catch (error) {
     throw new Error(
-      `Failed to update task (${response.status})${errorBody ? `: ${errorBody}` : ""}`,
+      `Could not update task: ${error instanceof Error ? error.message : String(error)}`,
+      { cause: error },
     );
   }
-  return response.json();
 };

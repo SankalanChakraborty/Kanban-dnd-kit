@@ -11,6 +11,7 @@ import { updateTask } from "../api/task";
 import LogoutButton from "./LogoutButton";
 import { logout } from "../api/user";
 import { useNavigate } from "react-router-dom";
+import AddTaskModal from "./AddtaskModal";
 
 const columns: ColumnType[] = [
   {
@@ -31,7 +32,8 @@ const Homepage = () => {
   const { isAuthenticated, setIsAuthenticated, isLoading, setIsLoading } =
     useUserContext();
   const { tasks, setTasks, selectedTask } = useTaskContext();
-  const { isModalOpen } = useModalContext();
+  const { isEditCardModalOpen, isAddTaskModalOpen, addTaskColumn } =
+    useModalContext();
 
   const navigate = useNavigate();
 
@@ -100,26 +102,15 @@ const Homepage = () => {
 
   return (
     isAuthenticated && (
-      // <div className="app-container w-full min-h-screen bg-[linear-gradient(135deg,#020617_0%,#0f172a_55%,#1e293b_100%)] py-4 px-4 sm:py-6 sm:px-8 lg:py-8 lg:px-16">
-      //   <div className="mx-auto flex max-w-6xl flex-col gap-8">
-      //     {isModalOpen ? <EditCardModal key={selectedTask?.id} /> : null}
-      //     <h1 className="app-heading text-4xl font-bold text-slate-100">
-      //       Kanban board
-      //     </h1>
-      //     <Search />
-      //     <DragDropProvider onDragEnd={handleDragEnd}>
-      //       <div className="columns-container grid grid-cols-1 gap-6 md:grid-cols-3 items-start">
-      //         {columns.map((column) => (
-      //           <Column key={column.id} column={column} />
-      //         ))}
-      //       </div>
-      //     </DragDropProvider>
-      //   </div>
-      // </div>
-
       <div className="app-container w-full min-h-screen bg-[linear-gradient(135deg,#020617_0%,#0f172a_55%,#1e293b_100%)] py-4 px-4 sm:py-6 sm:px-8 lg:py-8 lg:px-16">
         <div className="mx-auto flex max-w-6xl flex-col gap-8">
-          {isModalOpen ? <EditCardModal key={selectedTask?.id} /> : null}
+          {isEditCardModalOpen ? (
+            <EditCardModal key={selectedTask?.id} />
+          ) : null}
+
+          {isAddTaskModalOpen && addTaskColumn ? (
+            <AddTaskModal key={addTaskColumn.id} column={addTaskColumn} />
+          ) : null}
 
           {/* Header with Title and Logout Button */}
           <header className="flex items-center justify-between gap-4 pb-2 border-b border-slate-800/60">

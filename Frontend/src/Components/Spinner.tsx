@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function ElegantGlowSpinner({
   size = "lg",
   text = "Processing request...",

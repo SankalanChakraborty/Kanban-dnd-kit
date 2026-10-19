@@ -9,7 +9,7 @@ import { updateTask } from "../api/task";
 
 const EditCardModal = () => {
   const { selectedTask, setSelectedTask, setTasks } = useTaskContext();
-  const { setIsModalOpen } = useModalContext();
+  const { setIsEditCardModalOpen } = useModalContext();
   const [newTaskTitle, setNewTaskTitle] = useState(selectedTask?.title ?? "");
   const [newTaskDesc, setNewTaskDesc] = useState(
     selectedTask?.description ?? "",
@@ -44,7 +44,7 @@ const EditCardModal = () => {
 
   const closeModal = () => {
     setSelectedTask(null);
-    setIsModalOpen(false);
+    setIsEditCardModalOpen(false);
   };
 
   const handleSave = async () => {

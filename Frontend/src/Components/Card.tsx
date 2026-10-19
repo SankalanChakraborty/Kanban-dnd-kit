@@ -11,7 +11,7 @@ interface CardProps {
 
 const Card = ({ task }: CardProps) => {
   const { setSelectedTask } = useTaskContext();
-  const { setIsModalOpen } = useModalContext();
+  const { setIsEditCardModalOpen } = useModalContext();
 
   const { ref } = useDraggable({
     id: task.id,
@@ -21,7 +21,7 @@ const Card = ({ task }: CardProps) => {
 
   const handleCardClick = () => {
     setSelectedTask(task);
-    setIsModalOpen(true);
+    setIsEditCardModalOpen(true);
   };
 
   return (
