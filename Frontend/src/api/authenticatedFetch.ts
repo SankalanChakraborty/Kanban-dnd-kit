@@ -1,26 +1,25 @@
 const USER_API_BASE_URL = import.meta.env.VITE_USER_API_BASE_URL;
+export const AUTH_EXPIRED_EVENT = "auth:expired";
 
-let refreshInFlight: Promise<boolean> | null = null;
+const refreshSession = async (): Promise<boolean> => {
+  const response = await fetch(`${USER_API_BASE_URL}/auth/refresh`, {
+    method: "GET",
+    credentials: "include",
+  });
 
-const refreshSession = (): Promise<boolean> => {
-  if (!refreshInFlight) {
-    refreshInFlight = fetch(`${USER_API_BASE_URL}/auth/refresh`, {
-      method: "GET",
-      credentials: "include",
-    })
-      .then((response) => response.ok)
-      .finally(() => {
-        refreshInFlight = null;
-      });
+  if (response.status === 401) return false;
+  if (!response.ok) {
+    throw new Error(`Session refresh failed (${response.status})`);
   }
 
-  return refreshInFlight;
+  return true;
 };
 
 export const authenticatedFetch = async (
   input: RequestInfo | URL,
   init: RequestInit = {},
 ): Promise<Response> => {
+  console.log("Init>>>>>>>", init, "Input>>>>>>>>", input);
   const requestInit: RequestInit = { ...init, credentials: "include" };
   const response = await fetch(input, requestInit);
 
@@ -29,8 +28,15 @@ export const authenticatedFetch = async (
   }
 
   if (!(await refreshSession())) {
+    window.dispatchEvent(new Event(AUTH_EXPIRED_EVENT));
     return response;
   }
 
-  return fetch(input, requestInit);
+  const retryResponse = await fetch(input, requestInit);
+
+  if (retryResponse.status === 401) {
+    window.dispatchEvent(new Event(AUTH_EXPIRED_EVENT));
+  }
+
+  return retryResponse;
 };
