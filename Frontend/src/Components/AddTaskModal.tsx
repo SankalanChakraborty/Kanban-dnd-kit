@@ -16,7 +16,7 @@ const AddTaskModal = ({ column }: AddTaskModalProps) => {
   const { setTasks } = useTaskContext();
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskDesc, setNewTaskDesc] = useState("");
-  const [newDueDate, setNewDueDate] = useState<Date | null>(null);
+  const [newDueDate, setNewDueDate] = useState<Date | null>(new Date());
   const [newTaskPriority, setNewTaskPriority] = useState<TaskPriority>("low");
 
   const handleTasKTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
