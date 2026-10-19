@@ -18,7 +18,7 @@ import {
   Loader2,
   Zap,
 } from "lucide-react";
-import { login } from "../api/user";
+import { login, register } from "../api/user";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../Context/UserContext";
 
@@ -202,7 +202,7 @@ export default function Login() {
   };
 
   // Handle Sign Up submission
-  const handleSignUpSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSignUpSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const errors: SignUpErrors = {};
 
@@ -231,22 +231,31 @@ export default function Login() {
     setSignUpErrors(errors);
     if (Object.keys(errors).length > 0) return;
 
-    setIsSigningUp(true);
-    setTimeout(() => {
-      setIsSigningUp(false);
-      addToast(
-        `Account created for ${signUpData.name}! Please sign in.`,
-        "success",
-      );
-      setSignUpData({
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        terms: false,
-      });
-      setTab("signin");
-    }, 1400);
+    const data = await register(
+      signUpData.name,
+      signUpData.email,
+      signUpData.password,
+    );
+    console.log(data);
+
+    if (data.status === "success") {
+      setIsSigningUp(true);
+      setTimeout(() => {
+        setIsSigningUp(false);
+        addToast(
+          `Account created for ${signUpData.name}! Please sign in.`,
+          "success",
+        );
+        setSignUpData({
+          name: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+          terms: false,
+        });
+        setTab("signin");
+      }, 1400);
+    }
   };
 
   // Handle Forgot Password submission

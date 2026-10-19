@@ -18,7 +18,7 @@ router.get("/", getAllUsers);
 router.post("/auth/login", login);
 router.get("/auth/me", authMiddleware, getCurrentUser);
 router.post("/auth/register", register);
-router.get("/auth/logout", logout);
+router.post("/auth/logout", logout);
 router.get("/auth/refresh", rotateToken);
 
 export default router;

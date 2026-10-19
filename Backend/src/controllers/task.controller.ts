@@ -59,9 +59,14 @@ export const createTask = async (req: AuthenticatedRequest, res: Response) => {
   }
 };
 
-export const getTasks = async (req: Request, res: Response) => {
+export const getTasks = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const tasks = await Task.find();
+    const user = req.user?.id;
+    if (!user) {
+      return res.status(401).json({ status: "error", message: "Unauthorized" });
+    }
+
+    const tasks = await Task.find({ user });
     res.status(200).json({
       status: "success",
       message: "Tasks fetched successfully",
@@ -74,14 +79,15 @@ export const getTasks = async (req: Request, res: Response) => {
 
 export const updateTask = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { status, title, description, priority, dueDate, columnId } = req.body as {
-      status?: string;
-      title?: string;
-      description?: string;
-      priority?: string;
-      dueDate?: string;
-      columnId?: string;
-    };
+    const { status, title, description, priority, dueDate, columnId } =
+      req.body as {
+        status?: string;
+        title?: string;
+        description?: string;
+        priority?: string;
+        dueDate?: string;
+        columnId?: string;
+      };
     if (
       status === undefined &&
       title === undefined &&
