@@ -4,12 +4,14 @@ import type { Request, Response } from "express";
 import User from "../models/user.model.ts";
 import {
   clearAuthCookies,
+  emailVerificationToken,
   hashToken,
   secret,
   setAuthCookies,
   signAccessToken,
   signRefreshToken,
 } from "../utils/tokens.ts";
+import sendEmail from "../utils/sendEmail.ts";
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -34,9 +36,30 @@ export const register = async (req: Request, res: Response) => {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const newUser = new User({ name, email, password: hashedPassword });
+    const newUser = new User({
+      name,
+      email,
+      password: hashedPassword,
+      isEmailVerified: false,
+    });
 
     await newUser.save();
+
+    // send email verification link
+    const verificationLink = `${process.env.FRONTEND_URL}/verify-email?token=${emailVerificationToken(newUser._id.toString())}`;
+
+    const emailBody = `
+    <p>Please click <a href="${verificationLink}">here</a> to verify your email.</p>
+    <p>If you did not create an account, please ignore this email.</p>
+    `;
+
+    const sendEmailResponse = await sendEmail(
+      newUser.email,
+      "Verify your email",
+      emailBody,
+    );
+
+    console.log("Email sent response:", sendEmailResponse); // Debugging line
 
     return res.status(201).json({
       status: "success",
@@ -47,6 +70,42 @@ export const register = async (req: Request, res: Response) => {
     return res
       .status(500)
       .json({ status: "error", message: "Error registering user" });
+  }
+};
+
+export const verifyEmailHandler = async (req: Request, res: Response) => {
+  const { token } = req.query as { token?: string };
+
+  if (!token) {
+    return res
+      .status(400)
+      .json({ status: "error", message: "Invalid verification token" });
+  }
+
+  try {
+    const payload = jwt.verify(
+      token,
+      process.env.EMAIL_VERIFICATION_SECRET as string,
+    ) as JwtPayload;
+    const user = await User.findById(payload.id);
+    if (!user) {
+      return res
+        .status(400)
+        .json({ status: "error", message: "User not found" });
+    }
+    if (!user.isEmailVerified) {
+      user.isEmailVerified = true;
+      await user.save();
+
+      return res.status(200).json({
+        status: "success",
+        message: "Email verified successfully",
+      });
+    }
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ status: "error", message: "Invalid verification token" });
   }
 };
 

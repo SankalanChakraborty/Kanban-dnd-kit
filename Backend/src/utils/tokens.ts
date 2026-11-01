@@ -25,6 +25,13 @@ export const signRefreshToken = (userID: string) => {
   });
 };
 
+export const emailVerificationToken = (userID: string) => {
+  return jwt.sign({ id: userID }, secret("EMAIL_VERIFICATION_SECRET"), {
+    algorithm: "HS256",
+    expiresIn: "1d",
+  });
+};
+
 const baseCookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
