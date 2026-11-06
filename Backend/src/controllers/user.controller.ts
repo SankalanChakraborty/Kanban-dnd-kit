@@ -98,10 +98,11 @@ export const verifyEmailHandler = async (req: Request, res: Response) => {
       user.isEmailVerified = true;
       await user.save();
 
-      return res.status(200).json({
-        status: "success",
-        message: "Email verified successfully",
-      });
+      // return res.status(200).json({
+      //   status: "success",
+      //   message: "Email verified successfully",
+      // });
+      return res.redirect(`${process.env.FRONTEND_URL}/login?verified=1`);
     }
   } catch (error) {
     return res
