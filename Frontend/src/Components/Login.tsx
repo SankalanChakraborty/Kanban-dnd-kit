@@ -246,7 +246,7 @@ export default function Login() {
       setTimeout(() => {
         setIsSigningUp(false);
         addToast(
-          `Account created for ${signUpData.name}! Please sign in.`,
+          `Account created successfully! Please verify your email to activate your account.`,
           "success",
         );
         setSignUpData({

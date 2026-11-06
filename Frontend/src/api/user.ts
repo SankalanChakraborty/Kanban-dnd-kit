@@ -63,6 +63,23 @@ export const login = async (
   }
 };
 
+export const forgotPassword = async (
+  email: string,
+): Promise<{ status: string; message: string }> => {
+  try {
+    const { headers } = getApiHeaders();
+    const response = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+      method: "POST",
+      credentials: "include",
+      headers,
+      body: JSON.stringify({ email }),
+    });
+    return response.json();
+  } catch (error) {
+    throw new Error("Error while requesting password reset", { cause: error });
+  }
+};
+
 export const getCurrentUser = async (): Promise<CurrentUserResponse> => {
   try {
     const response = await authenticatedFetch(`${API_BASE_URL}/auth/me`, {

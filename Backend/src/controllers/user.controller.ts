@@ -231,11 +231,10 @@ export const forgotPassword = async (req: Request, res: Response) => {
 };
 
 export const resetPassword = async (req: Request, res: Response) => {
-  const { token } = req.query as {
+  const { token, password } = req.body as {
     token?: string;
+    password?: string;
   };
-
-  const { password } = req.body as { password?: string };
 
   if (!token) {
     return res
