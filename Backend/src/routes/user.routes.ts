@@ -7,6 +7,8 @@ import {
   register,
   rotateToken,
   verifyEmailHandler,
+  resetPassword,
+  forgotPassword,
 } from "../controllers/user.controller.ts";
 
 import authMiddleware from "../middleware/auth.middleware.ts";
@@ -19,7 +21,9 @@ router.get("/", getAllUsers);
 router.post("/auth/login", login);
 router.get("/auth/me", authMiddleware, getCurrentUser);
 router.post("/auth/register", register);
-router.post("/auth/verify-email", verifyEmailHandler);
+router.get("/auth/verify-email", verifyEmailHandler);
+router.post("/auth/forgot-password", forgotPassword);
+router.post("/auth/reset-password", resetPassword);
 router.post("/auth/logout", logout);
 router.get("/auth/refresh", rotateToken);
 

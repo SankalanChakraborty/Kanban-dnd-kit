@@ -13,6 +13,11 @@ interface LoginRegisterResponse {
   user: User;
 }
 
+interface AuthErrorResponse {
+  status: string;
+  message: string;
+}
+
 interface CurrentUserResponse {
   status: string;
   isAuthenticated: boolean;
@@ -25,7 +30,7 @@ export const register = async (
   name: string,
   email: string,
   password: string,
-): Promise<LoginRegisterResponse> => {
+): Promise<LoginRegisterResponse | AuthErrorResponse> => {
   try {
     const { headers } = getApiHeaders();
     const response = await fetch(`${API_BASE_URL}/auth/register`, {
@@ -34,12 +39,6 @@ export const register = async (
       headers,
       body: JSON.stringify({ name, email, password }),
     });
-    if (!response.ok) {
-      const errorBody = await response.text();
-      throw new Error(
-        `Failed to create new user (${response.status})${errorBody ? `: ${errorBody}` : ""}`,
-      );
-    }
     return response.json();
   } catch (error) {
     throw new Error("Error while creating new user", { cause: error });
@@ -49,7 +48,7 @@ export const register = async (
 export const login = async (
   email: string,
   password: string,
-): Promise<LoginRegisterResponse> => {
+): Promise<LoginRegisterResponse | AuthErrorResponse> => {
   try {
     const { headers } = getApiHeaders();
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
@@ -58,12 +57,6 @@ export const login = async (
       headers,
       body: JSON.stringify({ email, password }),
     });
-    if (!response.ok) {
-      const errorBody = await response.text();
-      throw new Error(
-        `Login failed (${response.status})${errorBody ? `: ${errorBody}` : ""}`,
-      );
-    }
     return response.json();
   } catch (error) {
     throw new Error("Error while logging in", { cause: error });

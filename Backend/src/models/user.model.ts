@@ -16,6 +16,9 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  passwordResetToken: { type: String, select: false },
+  passwordResetTokenExpiresAt: { type: Date, select: false },
+  tokenVersion: { type: Number, default: 0 },
   disAllowedRefreshTokens: { type: [revokedTokenSchema], default: [] },
 });
 

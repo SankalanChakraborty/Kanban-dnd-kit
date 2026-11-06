@@ -186,6 +186,7 @@ export default function Login() {
 
     const data = await login(signInData.emailOrUser, signInData.password);
     console.log(data);
+
     if (data.status === "success") {
       setIsAuthenticated(true);
       setIsLoading(false);
@@ -198,6 +199,8 @@ export default function Login() {
           "success",
         );
       }, 1200);
+    } else {
+      addToast(data.message || "Login failed. Please try again.", "error");
     }
   };
 
@@ -313,7 +316,7 @@ export default function Login() {
       </header>
 
       {/* Toast Notification Container */}
-      <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 max-w-sm w-full px-4 pointer-events-none">
+      <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 w-fit px-4 pointer-events-none">
         {toasts.map((toast) => (
           <div
             key={toast.id}
