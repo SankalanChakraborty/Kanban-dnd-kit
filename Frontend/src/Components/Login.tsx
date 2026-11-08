@@ -18,7 +18,7 @@ import {
   Loader2,
   Zap,
 } from "lucide-react";
-import { login, register } from "../api/user";
+import { forgotPassword, login, register } from "../api/user";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../Context/UserContext";
 
@@ -170,6 +170,7 @@ export default function Login() {
   // Handle Sign In submission
   const handleSignInSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSigningIn(true);
     const errors: SignInErrors = {};
 
     if (!signInData.emailOrUser.trim()) {
@@ -182,31 +183,37 @@ export default function Login() {
     }
 
     setSignInErrors(errors);
-    if (Object.keys(errors).length > 0) return;
+    if (Object.keys(errors).length > 0) {
+      setIsSigningIn(false);
+      return;
+    }
 
     const data = await login(signInData.emailOrUser, signInData.password);
+
     console.log(data);
 
     if (data.status === "success") {
       setIsAuthenticated(true);
       setIsLoading(false);
       navigate("/");
-      setIsSigningIn(true);
+
       setTimeout(() => {
         setIsSigningIn(false);
         addToast(
           `Welcome back, ${signInData.emailOrUser}! Successfully logged in.`,
           "success",
         );
-      }, 1200);
+      }, 1500);
     } else {
       addToast(data.message || "Login failed. Please try again.", "error");
+      setIsSigningIn(false);
     }
   };
 
   // Handle Sign Up submission
   const handleSignUpSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSigningUp(true);
     const errors: SignUpErrors = {};
 
     if (!signUpData.name.trim()) {
@@ -232,17 +239,20 @@ export default function Login() {
     }
 
     setSignUpErrors(errors);
-    if (Object.keys(errors).length > 0) return;
+    if (Object.keys(errors).length > 0) {
+      setIsSigningUp(false);
+      return;
+    }
 
     const data = await register(
       signUpData.name,
       signUpData.email,
       signUpData.password,
     );
-    console.log(data);
+
+    console.log("Registration data:", data);
 
     if (data.status === "success") {
-      setIsSigningUp(true);
       setTimeout(() => {
         setIsSigningUp(false);
         addToast(
@@ -257,25 +267,41 @@ export default function Login() {
           terms: false,
         });
         setTab("signin");
-      }, 1400);
+      }, 1500);
+    } else {
+      addToast(
+        data.message || "Registration failed. Please try again.",
+        "error",
+      );
+      setIsSigningUp(false);
     }
   };
 
   // Handle Forgot Password submission
-  const handleForgotSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleForgotSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setForgotLoading(true);
     if (!forgotEmail.trim() || !validateEmail(forgotEmail)) {
       addToast("Please enter a valid email address.", "error");
       return;
     }
+    const data = await forgotPassword(forgotEmail);
 
-    setForgotLoading(true);
+    console.log("Forgot password response:", data);
+
+    if (data.status !== "success") {
+      addToast(
+        data.message || "Failed to send password recovery link.",
+        "error",
+      );
+      setForgotLoading(false);
+    }
+
     setTimeout(() => {
       setForgotLoading(false);
       setIsForgotModalOpen(false);
-      const sentTo = forgotEmail;
       setForgotEmail("");
-      addToast(`Password recovery link sent to ${sentTo}!`, "success");
+      addToast(data.message, "success");
     }, 1100);
   };
 
@@ -415,6 +441,7 @@ export default function Login() {
       )}
 
       {/* Main Container */}
+
       <main className="relative z-10 w-full max-w-120">
         <div className="backdrop-blur-xl bg-white/85 dark:bg-slate-900/85 border border-slate-200/80 dark:border-slate-800/80 rounded-3xl shadow-[0_20px_50px_rgba(8,112,184,0.07)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.6)] p-6 sm:p-9 transition-all duration-300">
           {/* Brand Header */}
@@ -876,7 +903,10 @@ export default function Login() {
                     type="checkbox"
                     checked={signUpData.terms}
                     onChange={(e) => {
-                      setSignUpData({ ...signUpData, terms: e.target.checked });
+                      setSignUpData({
+                        ...signUpData,
+                        terms: e.target.checked,
+                      });
                       if (signUpErrors.terms)
                         setSignUpErrors({ ...signUpErrors, terms: "" });
                     }}

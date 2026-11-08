@@ -20,6 +20,13 @@ const userSchema = new mongoose.Schema({
   passwordResetTokenExpiresAt: { type: Date, select: false },
   tokenVersion: { type: Number, default: 0 },
   disAllowedRefreshTokens: { type: [revokedTokenSchema], default: [] },
+  workspace: [{ type: mongoose.Schema.Types.ObjectId, ref: "Workspace" }],
+  teams: [{ type: mongoose.Schema.Types.ObjectId, ref: "Team" }],
+  role: {
+    type: String,
+    enum: ["user", "admin"],
+    default: "user",
+  },
 });
 
 const User = mongoose.model("User", userSchema);

@@ -80,6 +80,30 @@ export const forgotPassword = async (
   }
 };
 
+export const resetPassword = async (
+  token: string | null,
+  newPassword: string,
+): Promise<{ status: string; message: string }> => {
+  if (!token) {
+    throw new Error("Token is required for password reset");
+  }
+  if (!newPassword) {
+    throw new Error("New password is required for password reset");
+  }
+  try {
+    const { headers } = getApiHeaders();
+    const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+      method: "POST",
+      credentials: "include",
+      headers,
+      body: JSON.stringify({ token, password: newPassword }),
+    });
+    return response.json();
+  } catch (error) {
+    throw new Error("Error while resetting password", { cause: error });
+  }
+};
+
 export const getCurrentUser = async (): Promise<CurrentUserResponse> => {
   try {
     const response = await authenticatedFetch(`${API_BASE_URL}/auth/me`, {

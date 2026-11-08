@@ -1,17 +1,17 @@
 import { DragDropProvider, type DragEndEvent } from "@dnd-kit/react";
-import { useTaskContext } from "../Context/TaskContext";
-import { useModalContext } from "../Context/ModalContext";
-import Search from "./Search";
-import EditCardModal from "./EditCardModal";
-import Column from "./Column";
-import type { ColumnType, Task } from "../interface";
-import { useUserContext } from "../Context/UserContext";
-import Spinner from "./Spinner";
-import { updateTask } from "../api/task";
-import LogoutButton from "./LogoutButton";
-import { logout } from "../api/user";
+import { useTaskContext } from "../Context/TaskContext.ts";
+import { useModalContext } from "../Context/ModalContext.ts";
+import Search from "./Search.tsx";
+import EditCardModal from "./EditCardModal.tsx";
+import Column from "./Column.tsx";
+import type { ColumnType, Task } from "../interface.ts";
+import { useUserContext } from "../Context/UserContext.ts";
+import Spinner from "./Spinner.tsx";
+import { updateTask } from "../api/task.ts";
+import LogoutButton from "./LogoutButton.tsx";
+import { logout } from "../api/user.ts";
 import { useNavigate } from "react-router-dom";
-import AddTaskModal from "./AddtaskModal";
+import AddTaskModal from "./AddTaskModal.tsx";
 
 const columns: ColumnType[] = [
   {
@@ -28,7 +28,7 @@ const columns: ColumnType[] = [
   },
 ];
 
-const Homepage = () => {
+const Board = () => {
   const { isAuthenticated, setIsAuthenticated, isLoading, setIsLoading } =
     useUserContext();
   const { tasks, setTasks, selectedTask } = useTaskContext();
@@ -135,4 +135,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default Board;

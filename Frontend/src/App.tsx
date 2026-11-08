@@ -1,9 +1,16 @@
 import Login from "./Components/Login";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Homepage from "./Components/Homepage";
+import Board from "./Components/Board";
 import { Navigate, Outlet } from "react-router-dom";
 import { useUserContext } from "./Context/UserContext";
 import Spinner from "./Components/Spinner";
+import ResetPw from "./Components/ResetPw";
+import AddWorkspace from "./Components/AddWorkspace";
+import WelcomeScreen1 from "./Components/WelcomeScreen1";
+import WelcomeScreen2 from "./Components/WelcomeScreen2";
+import WaitForInviteModdal from "./Components/WaitForInviteModdal";
+import InviteCodeModal from "./Components/InviteCodeModal";
+import WorkspaceLandingPage from "./Components/WorkspaceLandingPage";
 
 function ProtectedRoute() {
   const { isAuthenticated, isLoading } = useUserContext();
@@ -22,8 +29,16 @@ function App() {
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="/reset-password" element={<ResetPw />} />
+        <Route path="/welcome1" element={<WelcomeScreen1 />} />
+        <Route path="/welcome2" element={<WelcomeScreen2 />} />
+        <Route path="/wait-for-invite" element={<WaitForInviteModdal />} />
+        <Route path="/invite-code" element={<InviteCodeModal />} />
+        <Route path="/landing-page" element={<WorkspaceLandingPage />} />
+
         <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<Homepage />} />
+          <Route path="/" element={<Board />} />
+          <Route path="/create-workspace" element={<AddWorkspace />} />
         </Route>
       </Routes>
     </Router>

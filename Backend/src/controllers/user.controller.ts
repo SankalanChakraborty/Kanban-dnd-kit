@@ -30,9 +30,10 @@ export const register = async (req: Request, res: Response) => {
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      return res
-        .status(400)
-        .json({ status: "error", message: "User already exists" });
+      return res.status(400).json({
+        status: "error",
+        message: "User with this email already exists",
+      });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -102,7 +103,7 @@ export const verifyEmailHandler = async (req: Request, res: Response) => {
       //   status: "success",
       //   message: "Email verified successfully",
       // });
-      return res.redirect(`${process.env.FRONTEND_URL}/login?verified=1`);
+      return res.redirect(`${process.env.FRONTEND_URL}/login?verified=true`);
     }
   } catch (error) {
     return res
@@ -195,6 +196,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
     const user = await User.findOne({ email });
     if (!user) {
       return res.json({
+        status: "error",
         message: "If the email exists, a password reset link will be sent.",
       });
     }
@@ -205,7 +207,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
     user.passwordResetTokenExpiresAt = expiresAt;
     await user.save();
 
-    const resetLink = `${process.env.BACKEND_URL}/auth/reset-password?token=${rawToken}`;
+    const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${rawToken}`;
 
     const emailBody = `
     <p>Please click <a href="${resetLink}">here</a> to reset your password.</p>
@@ -221,7 +223,9 @@ export const forgotPassword = async (req: Request, res: Response) => {
     console.log("Email sent response:", sendEmailResponse); // Debugging line
 
     return res.json({
-      message: "If the email exists, a password reset link will be sent.",
+      status: "success",
+      message:
+        "Password reset link sent to your email if it exists in our system.",
     });
   } catch (error) {
     return res.status(500).json({
