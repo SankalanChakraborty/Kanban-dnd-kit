@@ -1,3 +1,5 @@
+import Button from "../Components/shared/Button";
+import UserDropdown from "./shared/UserDropdown";
 import WorkspaceMemberList from "./WorkspaceMemberList";
 
 interface ActioRowProps {
@@ -35,20 +37,11 @@ const ActionRow = ({
             {description}
           </p>
         </div>
+
         {buttonPrimary ? (
-          <button
-            type="button"
-            className="px-5 py-2.5 w-fit rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-600/20 transition-all flex items-center gap-2"
-          >
-            {buttonLabel}
-          </button>
+          <Button buttonType={"primary"} buttonLabel={buttonLabel} />
         ) : (
-          <button
-            type="button"
-            className="px-4 py-2.5 w-fit rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-700/70 transition-colors"
-          >
-            {buttonLabel}
-          </button>
+          <Button buttonType={"secondary"} buttonLabel={buttonLabel} />
         )}
       </div>
     </div>
@@ -104,12 +97,7 @@ const WorkspaceLandingPage = () => {
             </span>
           </div>
         </div>
-        <div className="user-badging w-15 h-fit px-2 py-1 flex gap-3 justify-center items-center border-2 border-slate-700/70 hover:border-indigo-700 rounded-full cursor-pointer transition-all">
-          <div className="user-initials w-7 h-7 rounded-full flex justify-center items-center shrink-0 text-sm text-slate-100 bg-indigo-500">
-            A
-          </div>
-          <span className="text-xs text-slate-300">˅</span>
-        </div>
+        <UserDropdown user={"Alex"} />
       </div>
       <div className="page-header flex flex-col mt-10 mb-10">
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white">

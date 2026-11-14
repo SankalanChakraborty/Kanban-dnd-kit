@@ -1,5 +1,3 @@
-import React from "react";
-
 const AddWorkspace = () => {
   const roles = [
     { value: "admin", label: "Admin" },

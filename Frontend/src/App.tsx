@@ -31,11 +31,11 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/reset-password" element={<ResetPw />} />
         <Route path="/welcome1" element={<WelcomeScreen1 />} />
+        mvm;lvvvv
         <Route path="/welcome2" element={<WelcomeScreen2 />} />
         <Route path="/wait-for-invite" element={<WaitForInviteModdal />} />
         <Route path="/invite-code" element={<InviteCodeModal />} />
         <Route path="/landing-page" element={<WorkspaceLandingPage />} />
-
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Board />} />
           <Route path="/create-workspace" element={<AddWorkspace />} />
