@@ -1,5 +1,3 @@
-import React from "react";
-
 const WaitForInviteModdal = () => {
   return (
     <div className="flex flex-col max-w-sm p-6 bg-[#0B1220] justify-center items-center gap-3 rounded-xl shadow-lg">

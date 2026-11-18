@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+const TEAM_ROLES = ["owner", "member", "viewer"];
+
 const teamSchema = new mongoose.Schema(
   {
     name: {
@@ -18,6 +20,8 @@ const teamSchema = new mongoose.Schema(
         required: true,
         role: {
           type: String,
+          enum: TEAM_ROLES,
+          default: "member",
         },
       },
     ],

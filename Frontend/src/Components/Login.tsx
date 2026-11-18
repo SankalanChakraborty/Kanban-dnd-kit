@@ -255,10 +255,13 @@ export default function Login() {
     if (data.status === "success") {
       setTimeout(() => {
         setIsSigningUp(false);
-        addToast(
-          `Account created successfully! Please verify your email to activate your account.`,
-          "success",
-        );
+        // addToast(
+        //   `Account created successfully! Please verify your email to activate your account.`,
+        //   "success",
+        // );
+        const email = signUpData.email;
+        sessionStorage.setItem("email", email);
+        navigate("/email-verify", { state: { email }, replace: true });
         setSignUpData({
           name: "",
           email: "",

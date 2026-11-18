@@ -16,10 +16,12 @@ const Dropdown = () => {
       </div>
       <div className="p-2">
         <Button
-          buttonType="tertiary"
-          buttonLabel="+ Create Workspace"
+          buttonStyle="tertiary"
+          type={"submit"}
           additionalStyles={"px-2! py-2! w-full text-left"}
-        />
+        >
+          + Create Workspace
+        </Button>
         <a className="text=sm text-red-400 cursor-pointer" href="#">
           Sign out
         </a>

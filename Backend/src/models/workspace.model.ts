@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+const WORKSPACE_ROLES = ["owner", "member", "viewer"];
+
 const workspaceShema = new mongoose.Schema(
   {
     name: String,
@@ -12,8 +14,10 @@ const workspaceShema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
+        role: { type: String, enum: WORKSPACE_ROLES, default: "member" },
       },
     ],
+
     teams: [
       {
         type: mongoose.Schema.Types.ObjectId,

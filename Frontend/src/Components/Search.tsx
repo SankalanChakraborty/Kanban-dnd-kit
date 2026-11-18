@@ -4,6 +4,7 @@ import { useTaskContext } from "../Context/TaskContext";
 import type { Task, TaskPriority } from "../interface";
 import { createTask } from "../api/task";
 import DatePicker from "react-datepicker";
+import Button from "./shared/Button";
 
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -134,7 +135,7 @@ const Search = () => {
       {/* Submit Button */}
 
       <div className="w-full sm:col-span-2 xl:col-span-1 xl:w-auto pt-2 sm:pt-0 flex justify-end xl:block">
-        <Button buttonType="submit">Add Item</Button>
+        <Button buttonStyle="primary" buttonLabel="Add Item" type={"submit"} />
       </div>
     </form>
   );

@@ -11,6 +11,7 @@ const config: UserConfig & { test: InlineConfig } = {
     setupFiles: "./src/test/setup.ts",
     include: ["src/**/*.{test,spec}.{ts,tsx}"],
   },
+  server: { host: true },
 };
 
 export default defineConfig(config);

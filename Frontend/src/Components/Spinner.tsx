@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function KanbanSpinner({
   size = "md",
   label = "Loading...",

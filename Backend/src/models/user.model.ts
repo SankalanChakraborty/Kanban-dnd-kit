@@ -18,6 +18,9 @@ const userSchema = new mongoose.Schema({
   },
   passwordResetToken: { type: String, select: false },
   passwordResetTokenExpiresAt: { type: Date, select: false },
+  emailVerificationToken: { type: String, select: false },
+  emailVerificationExpiresAt: { type: Date, select: false },
+  emailVerificationSentAt: { type: Date, select: false }, // for the resend cooldown
   tokenVersion: { type: Number, default: 0 },
   disAllowedRefreshTokens: { type: [revokedTokenSchema], default: [] },
   workspace: [{ type: mongoose.Schema.Types.ObjectId, ref: "Workspace" }],

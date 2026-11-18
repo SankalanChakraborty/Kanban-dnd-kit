@@ -39,9 +39,21 @@ const ActionRow = ({
         </div>
 
         {buttonPrimary ? (
-          <Button buttonType={"primary"} buttonLabel={buttonLabel} />
+          <Button
+            buttonStyle={"primary"}
+            type="submit"
+            additionalStyles={"w-fit"}
+          >
+            {buttonLabel}
+          </Button>
         ) : (
-          <Button buttonType={"secondary"} buttonLabel={buttonLabel} />
+          <Button
+            buttonStyle={"secondary"}
+            type="button"
+            additionalStyles={"w-fit"}
+          >
+            {buttonLabel}
+          </Button>
         )}
       </div>
     </div>
