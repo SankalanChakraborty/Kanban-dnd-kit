@@ -43,6 +43,7 @@ export const register = async (req: Request, res: Response) => {
     if (existingUser) {
       return res.status(409).json({
         status: "error",
+        code: "EMAIL_EXISTS",
         message: "User with this email already exists",
       });
     }
@@ -124,15 +125,18 @@ export const resendEmailVerification = async (req: Request, res: Response) => {
     if (!email) {
       return res.status(400).json({
         status: "error",
+        code: "FIELDS_MISSING",
         message: "Email is required",
       });
     }
     const newUser = await User.findOne({ email: normalizeEmail(email) });
 
     if (!newUser) {
-      return res
-        .status(404)
-        .json({ status: "error", message: "User not found" });
+      return res.status(404).json({
+        status: "error",
+        code: "INVALID_USER",
+        message: "User not found",
+      });
     }
 
     if (newUser.isEmailVerified) {
@@ -196,6 +200,7 @@ export const resendEmailVerification = async (req: Request, res: Response) => {
     await newUser.save();
     return res.status(200).json({
       status: "success",
+      code: "EMAIL_SENT",
       message: `Another verification link has been sent to ${newUser.email}`,
     });
   } catch (error: any) {
@@ -255,9 +260,11 @@ export const login = async (req: Request, res: Response) => {
     };
 
     if (!email || !password) {
-      return res
-        .status(400)
-        .json({ status: "error", message: "Email and password are required" });
+      return res.status(400).json({
+        status: "error",
+        code: "FIELDS_MISSING",
+        message: "Email and password are required",
+      });
     }
 
     const user = await User.findOne({ email }).select("+password");
@@ -265,6 +272,7 @@ export const login = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(400).json({
         status: "error",
+        code: "AUTH_FAILED",
         message: "Email id or password is incorrect",
       });
     }
@@ -273,6 +281,7 @@ export const login = async (req: Request, res: Response) => {
     if (!user.isEmailVerified) {
       return res.status(403).json({
         status: "error",
+        code: "EMAIL_NOT_VERIFIED",
         message:
           "Email is not verified. Please verify your email before logging in.",
       });
@@ -285,6 +294,7 @@ export const login = async (req: Request, res: Response) => {
     if (!isPasswordValid) {
       return res.status(400).json({
         status: "error",
+        code: "AUTH_FAILED",
         message: "Email id or password is incorrect",
       });
     }
@@ -312,9 +322,11 @@ export const login = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    return res
-      .status(500)
-      .json({ status: "error", message: "Error logging in" });
+    return res.status(500).json({
+      status: "error",
+      code: "LOGIN_FAILED",
+      message: "Error logging in",
+    });
   }
 };
 

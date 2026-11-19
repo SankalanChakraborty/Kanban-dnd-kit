@@ -80,6 +80,30 @@ export const forgotPassword = async (
   }
 };
 
+export const resendVerifyMail = async (
+  email: string,
+): Promise<{
+  status: string;
+  code: string;
+  retryAfter: number;
+  message: string;
+}> => {
+  try {
+    const { headers } = getApiHeaders();
+    const response = await fetch(`${API_BASE_URL}/auth/resend-email`, {
+      method: "POST",
+      credentials: "include",
+      headers,
+      body: JSON.stringify({ email }),
+    });
+    return response.json();
+  } catch (error) {
+    throw new Error("Error while resending verification mail", {
+      cause: error,
+    });
+  }
+};
+
 export const resetPassword = async (
   token: string | null,
   newPassword: string,

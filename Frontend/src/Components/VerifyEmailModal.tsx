@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Button from "./shared/Button";
 import { useLocation, useNavigate } from "react-router-dom";
+import { resendVerifyMail } from "../api/user";
 
 const VerifyEmailModal = () => {
   const navigate = useNavigate();
@@ -17,16 +18,44 @@ const VerifyEmailModal = () => {
   }, [email, navigate]);
 
   const [timer, setTimer] = useState(42);
+  const [isResending, setIsResending] = useState(false);
+
   useEffect(() => {
-    if (!timer) {
-      return;
-    }
-    setTimeout(() => {
-      setTimer((prev) => prev - 1);
+    if (timer === 0) return;
+
+    const timeoutId = setTimeout(() => {
+      setTimer((t) => t - 1);
     }, 1000);
+
+    return () => clearTimeout(timeoutId);
   }, [timer]);
 
-  const resendEmailHandler = () => {};
+  const resendEmailHandler = async () => {
+    if (timer > 0 || !email || isResending) return;
+
+    setIsResending(true);
+    try {
+      const data = await resendVerifyMail(email as string);
+      console.log("Data from resend email>>>>", data);
+
+      if (data?.code === "ALREADY_VERIFIED") {
+        navigate("/login");
+        return;
+      }
+
+      if (data?.code === "COOLDOWN_ACTIVE") {
+        setTimer(data.retryAfter);
+      }
+
+      if (data?.status === "success") {
+        setTimer(42);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsResending(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex justify-center items-baseline p-4 bg-slate-950/60 backdrop-blur-sm transition-opacity duration-200 bg-[linear-gradient(135deg,#020617_0%,#0f172a_55%,#1e293b_100%)]">
@@ -104,26 +133,39 @@ const VerifyEmailModal = () => {
           Open the link to activate your account. It expires in 24 hours.
         </p>
         <div className="flex flex-col justify-center items-center w-full gap-2">
-          {timer ? (
+          {/* {timer ? (
             <Button
               buttonStyle={"disabled"}
               type={"button"}
-              disabled={true}
+              disabled={timer > 0}
               additionalStyles={"w-full"}
             >
-              Resend Email (in {timer}s)
+              {`Resend Email in ${timer}s`}
             </Button>
           ) : (
             <Button
               buttonStyle={"primary"}
               type={"submit"}
-              disabled={false}
+              disabled={timer < 0}
               onClick={resendEmailHandler}
               additionalStyles={"w-full"}
             >
               Resend Email
             </Button>
-          )}
+          )} */}
+          <Button
+            buttonStyle={timer > 0 || isResending ? "disabled" : "primary"}
+            type="button"
+            disabled={timer > 0 || isResending}
+            onClick={resendEmailHandler}
+            additionalStyles="w-full"
+          >
+            {isResending
+              ? "Sending..."
+              : timer > 0
+                ? `Resend Email in ${timer}s`
+                : "Resend Email"}
+          </Button>
           <a
             className="text-sm text-[#818CF8] hover:font-semibold transition-all"
             href="/login"

@@ -9,6 +9,7 @@ import {
   verifyEmailHandler,
   resetPassword,
   forgotPassword,
+  resendEmailVerification,
 } from "../controllers/user.controller.ts";
 
 import authMiddleware from "../middleware/auth.middleware.ts";
@@ -22,6 +23,7 @@ router.post("/auth/login", login);
 router.get("/auth/me", authMiddleware, getCurrentUser);
 router.post("/auth/register", register);
 router.get("/auth/verify-email", verifyEmailHandler);
+router.post("/auth/resend-email", resendEmailVerification);
 router.post("/auth/forgot-password", forgotPassword);
 router.post("/auth/reset-password", resetPassword);
 router.post("/auth/logout", logout);
