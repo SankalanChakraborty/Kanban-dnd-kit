@@ -189,24 +189,30 @@ export default function Login() {
     }
 
     const data = await login(signInData.emailOrUser, signInData.password);
-
     console.log(data);
 
-    if (data.status === "success") {
-      setIsAuthenticated(true);
-      setIsLoading(false);
-      navigate("/");
+    try {
+      if (data.status === "success") {
+        setIsAuthenticated(true);
+        setIsLoading(false);
+        /*
+        check if user has a workspace then take user there else take user to /welcome1 route
+        */
+        navigate("/");
 
-      setTimeout(() => {
+        setTimeout(() => {
+          setIsSigningIn(false);
+          addToast(
+            `Welcome back, ${signInData.emailOrUser}! Successfully logged in.`,
+            "success",
+          );
+        }, 1500);
+      } else {
+        addToast(data.message || "Login failed. Please try again.", "error");
         setIsSigningIn(false);
-        addToast(
-          `Welcome back, ${signInData.emailOrUser}! Successfully logged in.`,
-          "success",
-        );
-      }, 1500);
-    } else {
-      addToast(data.message || "Login failed. Please try again.", "error");
-      setIsSigningIn(false);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -288,24 +294,26 @@ export default function Login() {
       addToast("Please enter a valid email address.", "error");
       return;
     }
-    const data = await forgotPassword(forgotEmail);
+    try {
+      const data = await forgotPassword(forgotEmail);
+      console.log("Forgot password response:", data);
 
-    console.log("Forgot password response:", data);
-
-    if (data.status !== "success") {
-      addToast(
-        data.message || "Failed to send password recovery link.",
-        "error",
-      );
-      setForgotLoading(false);
+      if (data.status !== "success") {
+        addToast(
+          data.message || "Failed to send password recovery link.",
+          "error",
+        );
+        setForgotLoading(false);
+      }
+      setTimeout(() => {
+        setForgotLoading(false);
+        setIsForgotModalOpen(false);
+        setForgotEmail("");
+        addToast(data.message, "success");
+      }, 1100);
+    } catch (error) {
+      console.error(error);
     }
-
-    setTimeout(() => {
-      setForgotLoading(false);
-      setIsForgotModalOpen(false);
-      setForgotEmail("");
-      addToast(data.message, "success");
-    }, 1100);
   };
 
   // Social Auth mock trigger

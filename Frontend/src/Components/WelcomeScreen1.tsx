@@ -1,5 +1,3 @@
-import React from "react";
-
 const WelcomeScreen1 = () => {
   const name = "Alex"; // Replace with the actual user's name
   return (

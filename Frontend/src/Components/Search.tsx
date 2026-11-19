@@ -135,7 +135,9 @@ const Search = () => {
       {/* Submit Button */}
 
       <div className="w-full sm:col-span-2 xl:col-span-1 xl:w-auto pt-2 sm:pt-0 flex justify-end xl:block">
-        <Button buttonStyle="primary" buttonLabel="Add Item" type={"submit"} />
+        <Button buttonStyle="primary" type={"submit"}>
+          Add item
+        </Button>
       </div>
     </form>
   );
