@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import UserRoutes from "./routes/user.routes.ts";
 import TaskRoutes from "./routes/task.routes.ts";
+import WorkspaceRoutes from "./routes/workspace.routes.ts";
 import { USER_BASE_URL, TASK_BASE_URL } from "./constants.ts";
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(
 );
 
 app.use(`${USER_BASE_URL}`, UserRoutes);
+app.use(`${USER_BASE_URL}`, WorkspaceRoutes);
 app.use(`${TASK_BASE_URL}`, TaskRoutes);
 
 export default app;

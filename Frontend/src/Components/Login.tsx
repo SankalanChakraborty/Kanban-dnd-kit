@@ -9,9 +9,7 @@ import {
   EyeOff,
   User,
   ArrowRight,
-  CheckCircle2,
   AlertCircle,
-  Info,
   X,
   ShieldCheck,
   KeyRound,
@@ -21,15 +19,9 @@ import {
 import { forgotPassword, login, register } from "../api/user";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../Context/UserContext";
+import { useToastContext } from "../Context/ToastContext";
 
 type AuthTab = "signin" | "signup";
-type ToastType = "info" | "success" | "error";
-
-interface Toast {
-  id: number;
-  message: string;
-  type: ToastType;
-}
 
 interface SignInErrors {
   emailOrUser?: string;
@@ -62,6 +54,7 @@ export default function Login() {
   const [signInErrors, setSignInErrors] = useState<SignInErrors>({});
   const [showSignInPass, setShowSignInPass] = useState(false);
   const [isSigningIn, setIsSigningIn] = useState(false);
+  const { showToast } = useToastContext();
 
   // Sign Up form state
   const [signUpData, setSignUpData] = useState({
@@ -81,9 +74,6 @@ export default function Login() {
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotLoading, setForgotLoading] = useState(false);
 
-  // Toast notifications stack
-  const [toasts, setToasts] = useState<Toast[]>([]);
-
   // Sync theme with html root class
   useEffect(() => {
     const root = document.documentElement;
@@ -93,19 +83,6 @@ export default function Login() {
       root.classList.remove("dark");
     }
   }, [isDark]);
-
-  // Toast dispatcher
-  const addToast = (message: string, type: ToastType = "info") => {
-    const id = Date.now() + Math.random();
-    setToasts((prev) => [...prev, { id, message, type }]);
-    setTimeout(() => {
-      setToasts((prev) => prev.filter((t) => t.id !== id));
-    }, 4000);
-  };
-
-  const removeToast = (id: number) => {
-    setToasts((prev) => prev.filter((t) => t.id !== id));
-  };
 
   // Password strength calculator
   const passwordStrength = useMemo(() => {
@@ -196,23 +173,32 @@ export default function Login() {
         setIsAuthenticated(true);
         setIsLoading(false);
         /*
-        check if user has a workspace then take user there else take user to /welcome1 route
+        check if user has a workspace then take user to landing page else take user to /welcome1 route
         */
-        navigate("/");
+        if (
+          data.user?.workspace != undefined &&
+          data.user?.workspace.length > 0
+        ) {
+          navigate("/landing-page");
+        } else {
+          navigate("/welcome1");
+        }
 
         setTimeout(() => {
           setIsSigningIn(false);
-          addToast(
+          showToast(
             `Welcome back, ${signInData.emailOrUser}! Successfully logged in.`,
             "success",
           );
         }, 1500);
       } else {
-        addToast(data.message || "Login failed. Please try again.", "error");
+        showToast(data.message || "Login failed. Please try again.", "error");
         setIsSigningIn(false);
       }
     } catch (error) {
       console.error(error);
+      showToast("Failed to send password recovery link.", "error");
+      setForgotLoading(false);
     }
   };
 
@@ -261,10 +247,6 @@ export default function Login() {
     if (data.status === "success") {
       setTimeout(() => {
         setIsSigningUp(false);
-        // addToast(
-        //   `Account created successfully! Please verify your email to activate your account.`,
-        //   "success",
-        // );
         const email = signUpData.email;
         sessionStorage.setItem("email", email);
         navigate("/email-verify", { state: { email }, replace: true });
@@ -278,7 +260,7 @@ export default function Login() {
         setTab("signin");
       }, 1500);
     } else {
-      addToast(
+      showToast(
         data.message || "Registration failed. Please try again.",
         "error",
       );
@@ -291,7 +273,8 @@ export default function Login() {
     e.preventDefault();
     setForgotLoading(true);
     if (!forgotEmail.trim() || !validateEmail(forgotEmail)) {
-      addToast("Please enter a valid email address.", "error");
+      showToast("Please enter a valid email address.", "error");
+
       return;
     }
     try {
@@ -299,18 +282,19 @@ export default function Login() {
       console.log("Forgot password response:", data);
 
       if (data.status !== "success") {
-        addToast(
+        showToast(
           data.message || "Failed to send password recovery link.",
           "error",
         );
         setForgotLoading(false);
+      } else {
+        setTimeout(() => {
+          setForgotLoading(false);
+          setIsForgotModalOpen(false);
+          setForgotEmail("");
+          showToast(data.message, "success");
+        }, 1100);
       }
-      setTimeout(() => {
-        setForgotLoading(false);
-        setIsForgotModalOpen(false);
-        setForgotEmail("");
-        addToast(data.message, "success");
-      }, 1100);
     } catch (error) {
       console.error(error);
     }
@@ -318,9 +302,9 @@ export default function Login() {
 
   // Social Auth mock trigger
   const handleSocialAuth = (provider: string) => {
-    addToast(`Connecting to ${provider}...`, "info");
+    showToast(`Connecting to ${provider}...`, "info");
     setTimeout(() => {
-      addToast(`Authenticated via ${provider}!`, "success");
+      showToast(`Authenticated via ${provider}!`, "success");
     }, 1200);
   };
 
@@ -351,41 +335,6 @@ export default function Login() {
           )}
         </button>
       </header>
-
-      {/* Toast Notification Container */}
-      <div className="fixed top-5 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 w-fit px-4 pointer-events-none">
-        {toasts.map((toast) => (
-          <div
-            key={toast.id}
-            className={`pointer-events-auto flex items-center justify-between gap-3 px-4 py-3 rounded-2xl shadow-xl border text-sm font-medium backdrop-blur-md transition-all animate-bounce-short ${
-              toast.type === "success"
-                ? "bg-white/95 dark:bg-slate-900/95 border-emerald-500/40 text-emerald-800 dark:text-emerald-300"
-                : toast.type === "error"
-                  ? "bg-white/95 dark:bg-slate-900/95 border-rose-500/40 text-rose-800 dark:text-rose-300"
-                  : "bg-white/95 dark:bg-slate-900/95 border-indigo-500/40 text-indigo-800 dark:text-indigo-300"
-            }`}
-          >
-            <div className="flex items-center gap-2.5 overflow-hidden">
-              {toast.type === "success" && (
-                <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
-              )}
-              {toast.type === "error" && (
-                <AlertCircle className="w-5 h-5 text-rose-500 shrink-0" />
-              )}
-              {toast.type === "info" && (
-                <Info className="w-5 h-5 text-indigo-500 shrink-0" />
-              )}
-              <span className="truncate">{toast.message}</span>
-            </div>
-            <button
-              onClick={() => removeToast(toast.id)}
-              className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-0.5 rounded transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-        ))}
-      </div>
 
       {/* Forgot Password Modal */}
       {isForgotModalOpen && (
@@ -929,7 +878,7 @@ export default function Login() {
                       href="#terms"
                       onClick={(e) => {
                         e.preventDefault();
-                        addToast("Terms of Service reviewed.", "info");
+                        showToast("Terms of Service reviewed.", "info");
                       }}
                       className="text-indigo-600 dark:text-indigo-400 hover:underline"
                     >
@@ -940,7 +889,7 @@ export default function Login() {
                       href="#privacy"
                       onClick={(e) => {
                         e.preventDefault();
-                        addToast("Privacy Policy reviewed.", "info");
+                        showToast("Privacy Policy reviewed.", "info");
                       }}
                       className="text-indigo-600 dark:text-indigo-400 hover:underline"
                     >

@@ -1,6 +1,8 @@
+import { useSelector } from "react-redux";
 import Button from "../Components/shared/Button";
 import UserDropdown from "./shared/UserDropdown";
 import WorkspaceMemberList from "./WorkspaceMemberList";
+import type { RootState } from "../redux/store/store";
 
 interface ActioRowProps {
   idx: number;
@@ -19,6 +21,8 @@ const ActionRow = ({
   buttonLabel,
   border = "none",
 }: ActioRowProps) => {
+  const user = useSelector((s: RootState) => s.user.user);
+  const userName = user?.name;
   return (
     <div
       className={`row flex gap-2 py-4 ${
