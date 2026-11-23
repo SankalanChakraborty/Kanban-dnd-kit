@@ -96,6 +96,7 @@ export const getMyWorkspace = async (
 
   return res.status(201).json({
     status: "success",
+    code: "WORKSPACE_FETCHED",
     myWorkspace,
     message: "Worskspaces fetched successfully",
   });

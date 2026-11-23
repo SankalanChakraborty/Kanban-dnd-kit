@@ -1,8 +1,10 @@
 import { useState } from "react";
 import Button from "./shared/Button";
-import { createWorkspace } from "../api/workspace";
+// import { createWorkspace } from "../api/workspace";
 import { useNavigate } from "react-router-dom";
 import { useToastContext } from "../Context/ToastContext";
+import { useAppDispatch } from "../redux/store/hooks";
+import { createWorkspaceThunk } from "../redux/slice/workspaeSlice";
 
 const WelcomeScreen2 = () => {
   const [workspaceName, setWorkspaceName] = useState("");
@@ -10,17 +12,17 @@ const WelcomeScreen2 = () => {
   const [teamSize, setTeamSize] = useState("");
   const navigate = useNavigate();
   const { showToast } = useToastContext();
+  const dispatch = useAppDispatch();
 
   const handleWorkspaceNameChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    const value = e.target.value.trim();
-    if (value.length <= 2) {
+    if (e.target.value.trim().length <= 2) {
       setIsError(true);
     } else {
       setIsError(false);
     }
-    setWorkspaceName(value);
+    setWorkspaceName(e.target.value);
   };
 
   const handleTeamSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,20 +31,19 @@ const WelcomeScreen2 = () => {
 
   const handleCreateWorkspacehandler = async () => {
     try {
-      const data = await createWorkspace(workspaceName);
+      // const data = await createWorkspace(workspaceName);
+      const data = await dispatch(createWorkspaceThunk(workspaceName)).unwrap();
       console.log(data);
-      if (data.status === "success") {
+      if (data.code === "WORKSPACE_CREATED") {
         showToast(data.message, "success");
         navigate("/landing-page");
       } else {
-        showToast(data.message || "Workspace cannot be created", "error");
+        // showToast(data.message || "Workspace cannot be created", "error");
       }
     } catch (error) {
       console.error("Error ", error);
-      showToast(
-        "An unexpected error occurred while creating the workspace.",
-        "error",
-      );
+      const err = error as { message?: string; code?: string };
+      showToast(err.message ?? "An unexpected error occurred.", "error");
     } finally {
       setWorkspaceName("");
       setTeamSize("");
