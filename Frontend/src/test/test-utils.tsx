@@ -5,18 +5,21 @@ import TaskContextProvider from "../Context/TaskContextProvider";
 import ModalContextProvider from "../Context/ModalContextProvider";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import UserContextProvider from "../Context/UserContextProvide";
+import ToastContextProvider from "../Context/ToastContextProvider";
 
 const queryClient = new QueryClient();
 
 const AllTheProviders = ({ children }: { children: ReactNode }) => {
   return (
     <UserContextProvider>
-      <TaskContextProvider>
-        <ModalContextProvider>
-          {children}
-          <QueryClientProvider client={queryClient}></QueryClientProvider>
-        </ModalContextProvider>
-      </TaskContextProvider>
+      <ToastContextProvider>
+        <TaskContextProvider>
+          <ModalContextProvider>
+            {children}
+            <QueryClientProvider client={queryClient}></QueryClientProvider>
+          </ModalContextProvider>
+        </TaskContextProvider>
+      </ToastContextProvider>
     </UserContextProvider>
   );
 };

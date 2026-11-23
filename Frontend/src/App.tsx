@@ -33,18 +33,20 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/reset-password" element={<ResetPw />} />
         {/* Testing  */}
-        <Route path="/welcome1" element={<WelcomeScreen1 />} />
-        <Route path="/welcome2" element={<WelcomeScreen2 />} />
+
         <Route path="/wait-for-invite" element={<WaitForInviteModdal />} />
         <Route path="/invite-code" element={<InviteCodeModal />} />
-        <Route path="/landing-page" element={<WorkspaceLandingPage />} />
+
         <Route path="/invitations-modal" element={<Invitations />} />
         <Route path="/email-verify" element={<VerifyEmailModal />} />
 
         {/* Testing */}
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Board />} />
+          <Route path="/welcome1" element={<WelcomeScreen1 />} />
+          <Route path="/welcome2" element={<WelcomeScreen2 />} />
           <Route path="/create-workspace" element={<AddWorkspace />} />
+          <Route path="/landing-page" element={<WorkspaceLandingPage />} />
         </Route>
       </Routes>
     </Router>

@@ -14,6 +14,8 @@ import {
 } from "../utils/tokens.ts";
 import sendEmail from "../utils/sendEmail.ts";
 import { normalizeEmail } from "../utils/normalizeEmail.ts";
+import type { AuthenticatedRequest } from "../middleware/auth.middleware.ts";
+import Workspace from "../models/workspace.model.ts";
 
 const redirectToLogin = (res: Response, params: Record<string, string>) => {
   const url = new URL("/login", process.env.FRONTEND_URL as string);
@@ -319,6 +321,9 @@ export const login = async (req: Request, res: Response) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        workspace: user.workspace,
+        teams: user.teams,
+        role: user.role,
       },
     });
   } catch (error) {
@@ -532,7 +537,10 @@ export const rotateToken = async (req: Request, res: Response) => {
   }
 };
 
-export const getCurrentUser = async (req: Request, res: Response) => {
+export const getCurrentUser = async (
+  req: AuthenticatedRequest,
+  res: Response,
+) => {
   const { id } = (req as Request & { user: { id: string } }).user;
   try {
     const user = await User.findOne({ _id: id }, { _id: 1, name: 1, email: 1 });

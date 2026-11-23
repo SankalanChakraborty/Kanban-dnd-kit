@@ -1,7 +1,8 @@
 import type { Task } from "../interface";
+import { getApiHeaders } from "../utils/getApiHeaders";
 import { authenticatedFetch } from "./authenticatedFetch";
 
-const API_BASE_URL = import.meta.env.VITE_TASK_API_BASE_URL;
+const API_BASE_URL = `${import.meta.env.VITE_API_URL}/tasks`;
 
 interface TasksResponse {
   status: string;
@@ -20,15 +21,6 @@ interface CreateTaskResponse {
   message: string;
   task: Task;
 }
-
-export const getApiHeaders = () => {
-  return {
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-  };
-};
 
 export const getTasksFromDb = async (): Promise<TasksResponse> => {
   try {

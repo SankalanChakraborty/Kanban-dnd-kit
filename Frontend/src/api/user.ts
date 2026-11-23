@@ -1,20 +1,23 @@
-import { getApiHeaders } from "./task";
+import { getApiHeaders } from "../utils/getApiHeaders";
 import { authenticatedFetch } from "./authenticatedFetch";
 
-interface User {
+export interface User {
   id: string;
   name: string;
   email: string;
+  workspace: string[];
+  teams: string[];
+  role: string[];
 }
 
 interface LoginRegisterResponse {
-  status: string;
+  status: "success";
   message: string;
-  user: User;
+  user: User | null;
 }
 
 interface AuthErrorResponse {
-  status: string;
+  status: "error";
   message: string;
 }
 
@@ -129,20 +132,18 @@ export const resetPassword = async (
 };
 
 export const getCurrentUser = async (): Promise<CurrentUserResponse> => {
-  try {
-    const response = await authenticatedFetch(`${API_BASE_URL}/auth/me`, {
-      method: "GET",
-    });
-    if (!response.ok) {
-      const errorBody = await response.text();
-      throw new Error(
-        `Login failed (${response.status})${errorBody ? `: ${errorBody}` : ""}`,
-      );
-    }
-    return response.json();
-  } catch (error) {
-    throw new Error("Error while getting current user", { cause: error });
+  const response = await authenticatedFetch(`${API_BASE_URL}/auth/me`, {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.text();
+    throw new Error(
+      `Fetching current user failed (${response.status})${errorBody ? `: ${errorBody}` : ""}`,
+    );
   }
+
+  return response.json();
 };
 
 export const logout = async () => {

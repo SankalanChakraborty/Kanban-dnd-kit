@@ -1,19 +1,24 @@
 import mongoose from "mongoose";
 
-const WORKSPACE_ROLES = ["owner", "member", "viewer"];
+const WORKSPACE_ROLES = ["owner", "member", "viewer"] as const;
 
-const workspaceShema = new mongoose.Schema(
+const workspaceSchema = new mongoose.Schema(
   {
-    name: String,
+    name: { type: String, required: true, unique: true },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
+
     members: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        _id: false,
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
         role: { type: String, enum: WORKSPACE_ROLES, default: "member" },
       },
     ],
@@ -27,3 +32,9 @@ const workspaceShema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+workspaceSchema.index({ "members.user": 1 });
+workspaceSchema.index({ owner: 1, name: 1 }, { unique: true });
+
+const Workspace = mongoose.model("Workspace", workspaceSchema);
+export default Workspace;

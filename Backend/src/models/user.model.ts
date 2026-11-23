@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema({
   tokenVersion: { type: Number, default: 0 },
   disAllowedRefreshTokens: { type: [revokedTokenSchema], default: [] },
   workspace: [{ type: mongoose.Schema.Types.ObjectId, ref: "Workspace" }],
+  lastActiveWorkspace: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Workspace",
+  },
   teams: [{ type: mongoose.Schema.Types.ObjectId, ref: "Team" }],
   role: {
     type: String,

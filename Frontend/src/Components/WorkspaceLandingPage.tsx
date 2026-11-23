@@ -1,6 +1,9 @@
+import { useSelector } from "react-redux";
 import Button from "../Components/shared/Button";
 import UserDropdown from "./shared/UserDropdown";
 import WorkspaceMemberList from "./WorkspaceMemberList";
+import type { RootState } from "../redux/store/store";
+import { useEffect, useState } from "react";
 
 interface ActioRowProps {
   idx: number;
@@ -93,6 +96,15 @@ const memberList = [
 ];
 
 const WorkspaceLandingPage = () => {
+  const user = useSelector((s: RootState) => s.user.user);
+  const userName = user?.name;
+  const workspaces = useSelector((w: RootState) => w.workspace.list);
+  const [activeWorkspace, setActiveWorkspace] = useState("");
+
+  useEffect(() => {
+    console.log(workspaces);
+  }, []);
+
   return (
     <div className="flex flex-col w-full bg-[#0B1220] py-8 px-12">
       <div className="flex justify-between items-center">
@@ -113,7 +125,7 @@ const WorkspaceLandingPage = () => {
       </div>
       <div className="page-header flex flex-col mt-10 mb-10">
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-          Your workspace is ready, Alex
+          Your workspace is ready, {userName?.split(" ")[0]}
         </h1>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 mb-3">
           You created Northwind Labs, so you are its Owner. Here is how to get
