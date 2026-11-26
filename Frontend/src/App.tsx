@@ -2,7 +2,6 @@ import Login from "./Components/Login";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Board from "./Components/Board";
 import { Navigate, Outlet } from "react-router-dom";
-import { useUserContext } from "./Context/UserContext";
 import Spinner from "./Components/Spinner";
 import ResetPw from "./Components/ResetPw";
 import AddWorkspace from "./Components/AddWorkspace";
@@ -13,17 +12,28 @@ import InviteCodeModal from "./Components/InviteCodeModal";
 import WorkspaceLandingPage from "./Components/WorkspaceLandingPage";
 import Invitations from "./Components/Invitations";
 import VerifyEmailModal from "./Components/VerifyEmailModal";
+import WorkspaceBootstrap from "./Components/WorkspaceBootstrap";
+import { useAppDispatch, useAppSelector } from "./redux/store/hooks";
+import { clearUser, fetchCurrentUser } from "./redux/slice/userSlice";
+import { useEffect } from "react";
+import { AUTH_EXPIRED_EVENT } from "./api/authenticatedFetch";
 
 function ProtectedRoute() {
-  const { isAuthenticated, isLoading } = useUserContext();
+  const dispatch = useAppDispatch();
+  const status = useAppSelector((s) => s.user.status);
 
-  if (isLoading)
-    return (
-      <div className="w-full h-full flex justify-center items-center bg-[linear-gradient(135deg,#020617_0%,#0f172a_55%,#1e293b_100%)]">
-        <Spinner />
-      </div>
-    );
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
+  useEffect(() => {
+    if (status === "idle") dispatch(fetchCurrentUser());
+  }, [status, dispatch]);
+
+  useEffect(() => {
+    const onExpired = () => dispatch(clearUser());
+    window.addEventListener(AUTH_EXPIRED_EVENT, onExpired);
+    return () => window.removeEventListener(AUTH_EXPIRED_EVENT, onExpired);
+  }, [dispatch]);
+
+  if (status === "idle" || status === "pending") return <Spinner />;
+  return status === "succeeded" ? <Outlet /> : <Navigate to="/login" replace />;
 }
 
 function App() {
@@ -32,8 +42,8 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/reset-password" element={<ResetPw />} />
-        {/* Testing  */}
 
+        {/* Testing  */}
         <Route path="/wait-for-invite" element={<WaitForInviteModdal />} />
         <Route path="/invite-code" element={<InviteCodeModal />} />
 
@@ -41,12 +51,15 @@ function App() {
         <Route path="/email-verify" element={<VerifyEmailModal />} />
 
         {/* Testing */}
+
         <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<Board />} />
-          <Route path="/welcome1" element={<WelcomeScreen1 />} />
-          <Route path="/welcome2" element={<WelcomeScreen2 />} />
-          <Route path="/create-workspace" element={<AddWorkspace />} />
-          <Route path="/landing-page" element={<WorkspaceLandingPage />} />
+          <Route element={<WorkspaceBootstrap />}>
+            <Route path="/" element={<Board />} />
+            <Route path="/welcome1" element={<WelcomeScreen1 />} />
+            <Route path="/welcome2" element={<WelcomeScreen2 />} />
+            <Route path="/landing-page" element={<WorkspaceLandingPage />} />
+            <Route path="/create-workspace" element={<AddWorkspace />} />
+          </Route>
         </Route>
       </Routes>
     </Router>

@@ -20,21 +20,11 @@ import { forgotPassword, login, register } from "../api/user";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../Context/UserContext";
 import { useToastContext } from "../Context/ToastContext";
+import { useAppDispatch } from "../redux/store/hooks";
+import { setUser } from "../redux/slice/userSlice";
+import type { SignInErrors, SignUpErrors } from "../interface";
 
 type AuthTab = "signin" | "signup";
-
-interface SignInErrors {
-  emailOrUser?: string;
-  password?: string;
-}
-
-interface SignUpErrors {
-  name?: string;
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
-  terms?: string;
-}
 
 export default function Login() {
   const navigate = useNavigate();
@@ -73,6 +63,7 @@ export default function Login() {
   const [isForgotModalOpen, setIsForgotModalOpen] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotLoading, setForgotLoading] = useState(false);
+  const dispatch = useAppDispatch();
 
   // Sync theme with html root class
   useEffect(() => {
@@ -172,6 +163,7 @@ export default function Login() {
       if (data.status === "success") {
         setIsAuthenticated(true);
         setIsLoading(false);
+        dispatch(setUser(data.user));
         /*
         check if user has a workspace then take user to landing page else take user to /welcome1 route
         */

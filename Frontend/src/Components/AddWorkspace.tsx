@@ -1,11 +1,14 @@
+import { useModalContext } from "../Context/ModalContext";
+
 const AddWorkspace = () => {
+  const { setIsCreateWorkspaceModalOpen } = useModalContext();
   const roles = [
     { value: "admin", label: "Admin" },
     { value: "member", label: "Member" },
   ];
 
   return (
-    <div className="w-full h-full flex justify-center items-center bg-[linear-gradient(135deg,#020617_0%,#0f172a_55%,#1e293b_100%)]">
+    <div className="absolute inset-0 z-50 flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,#020617CC_0%,#0f172aCC_55%,#1e293bCC_100%)]">
       <div className="add-modal w-full px-6 py-8 max-w-lg bg-[#111a2e] border border-slate-700/70 rounded-xl shadow-lg backdrop-blur-sm">
         <div className="modal-header flex flex-col">
           <h3 className="text-xl font-bold text-slate-900 dark:text-white">
@@ -75,6 +78,7 @@ const AddWorkspace = () => {
             <button
               type="button"
               className="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              onClick={() => setIsCreateWorkspaceModalOpen(false)}
             >
               Cancel
             </button>

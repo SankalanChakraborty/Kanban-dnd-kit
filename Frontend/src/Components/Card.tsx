@@ -1,13 +1,9 @@
-import type { Task } from "../interface";
+import type { CardProps } from "../interface";
 import { CiCalendarDate } from "react-icons/ci";
 import { useDraggable } from "@dnd-kit/react";
 import { useTaskContext } from "../Context/TaskContext";
 import { useModalContext } from "../Context/ModalContext";
 import getPriorityBgColor from "../utils/getPriorityBgColor";
-
-interface CardProps {
-  task: Task;
-}
 
 const Card = ({ task }: CardProps) => {
   const { setSelectedTask } = useTaskContext();

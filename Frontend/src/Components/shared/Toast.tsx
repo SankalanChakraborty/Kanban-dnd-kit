@@ -1,12 +1,5 @@
 import { AlertCircle, CheckCircle2, Info, X } from "lucide-react";
-
-export type ToastType = "info" | "success" | "error";
-
-interface ToastProps {
-  message: string;
-  type: ToastType;
-  onClose: () => void;
-}
+import type { ToastProps } from "../../interface";
 
 const Toast = ({ message, type, onClose }: ToastProps) => {
   if (!message.trim()) return null;

@@ -1,26 +1,13 @@
-import type { Task } from "../interface";
+import type {
+  CreateTaskResponse,
+  Task,
+  TaskResponse,
+  TasksResponse,
+} from "../interface";
 import { getApiHeaders } from "../utils/getApiHeaders";
 import { authenticatedFetch } from "./authenticatedFetch";
 
 const API_BASE_URL = `${import.meta.env.VITE_API_URL}/tasks`;
-
-interface TasksResponse {
-  status: string;
-  message: string;
-  tasks: Task[];
-}
-
-interface TaskResponse {
-  status: string;
-  message: string;
-  task: Task;
-}
-
-interface CreateTaskResponse {
-  status: string;
-  message: string;
-  task: Task;
-}
 
 export const getTasksFromDb = async (): Promise<TasksResponse> => {
   try {

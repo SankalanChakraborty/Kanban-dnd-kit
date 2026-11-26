@@ -1,18 +1,13 @@
-import { useSelector } from "react-redux";
 import Button from "../Components/shared/Button";
 import UserDropdown from "./shared/UserDropdown";
-import WorkspaceMemberList from "./WorkspaceMemberList";
-import type { RootState } from "../redux/store/store";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useAppSelector } from "../redux/store/hooks";
+import { selectActiveWorkspace } from "../redux/selector";
 
-interface ActioRowProps {
-  idx: number;
-  title: string;
-  description: string;
-  buttonPrimary: boolean;
-  buttonLabel: string;
-  border: string;
-}
+import WorkspaceMemberList from "./WorkspaceMemberList";
+import type { ActionRowProps } from "../interface";
+import AddWorkspace from "./AddWorkspace";
+import { useModalContext } from "../Context/ModalContext";
 
 const ActionRow = ({
   idx,
@@ -21,7 +16,7 @@ const ActionRow = ({
   buttonPrimary,
   buttonLabel,
   border = "none",
-}: ActioRowProps) => {
+}: ActionRowProps) => {
   return (
     <div
       className={`row flex gap-2 py-4 ${
@@ -87,45 +82,36 @@ const rowInfo = [
   },
 ];
 
-const memberList = [
-  {
-    name: "Alex morgan",
-    email: "test@test.com",
-    isOwner: true,
-  },
-];
-
 const WorkspaceLandingPage = () => {
-  const user = useSelector((s: RootState) => s.user.user);
-  const userName = user?.name;
-  const workspaces = useSelector((w: RootState) => w.workspace.list);
-  const [activeWorkspace, setActiveWorkspace] = useState("");
-
+  // const dispatch = useAppDispatch();
+  const activeWorkspace = useAppSelector(selectActiveWorkspace);
+  const { isCreateWorkSpaceModalOpen } = useModalContext();
   useEffect(() => {
-    console.log(workspaces);
+    console.log(activeWorkspace);
   }, []);
 
   return (
     <div className="flex flex-col w-full bg-[#0B1220] py-8 px-12">
+      {isCreateWorkSpaceModalOpen && <AddWorkspace />}
       <div className="flex justify-between items-center">
         <div className="current-workspace flex justify-between">
           <div className="workspace-badging flex justify-center items-center p-3 rounded-lg bg-[#111a2e] gap-2 border border-slate-700/70">
             <div className="w-7 h-7 circle rounded-full p-1 flex justify-center items-center text-sm text-slate-100 bg-amber-700 shrink-0">
-              W
+              {activeWorkspace.name.split("")[0]}
             </div>
             <span className="text-md font-bold text-[#E2E8F0] dark:text-white">
-              Workspace Name
+              {activeWorkspace.name}
             </span>
             <span className="px-2 border text-xs text-[#E2E8F0] border-indigo-600 hover:border-indigo-700 rounded-full">
               Owner
             </span>
           </div>
         </div>
-        <UserDropdown user={"Alex"} />
+        <UserDropdown />
       </div>
       <div className="page-header flex flex-col mt-10 mb-10">
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-          Your workspace is ready, {userName?.split(" ")[0]}
+          Your workspace is ready, {activeWorkspace.owner.name}
         </h1>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 mb-3">
           You created Northwind Labs, so you are its Owner. Here is how to get
@@ -160,11 +146,11 @@ const WorkspaceLandingPage = () => {
           <h2 className="text-md font-bold text-slate-900 dark:text-white">
             Members · 1
           </h2>
-          {memberList.map((member) => (
+          {activeWorkspace.members.map((member) => (
             <WorkspaceMemberList
-              memberName={member.name}
-              email={member.email}
-              isOwner={true}
+              memberName={member.user.name}
+              email={member.user.email}
+              isOwner={member.role === "owner"}
             />
           ))}
         </div>

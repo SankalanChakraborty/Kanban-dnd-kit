@@ -1,8 +1,4 @@
-interface MemberListProps {
-  memberName: string;
-  email: string;
-  isOwner: boolean;
-}
+import type { MemberListProps } from "../interface";
 
 const WorkspaceMemberList = ({
   memberName,

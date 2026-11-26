@@ -1,11 +1,5 @@
 import { createContext, useContext } from "react";
-
-interface UserContextType {
-  isAuthenticated: boolean;
-  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
-  isLoading: boolean;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import type { UserContextType } from "../interface";
 
 const UserContext = createContext<UserContextType | null>(null);
 

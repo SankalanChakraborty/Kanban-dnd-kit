@@ -3,13 +3,13 @@ import getPriorityBgColor from "../utils/getPriorityBgColor";
 import { RxCrossCircled } from "react-icons/rx";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
-import type { ColumnType, Task, TaskPriority } from "../interface";
+import type {
+  AddTaskModalProps,
+  Task,
+  TaskPriority,
+} from "../interface";
 import { createTask } from "../api/task";
 import { useTaskContext } from "../Context/TaskContext";
-
-interface AddTaskModalProps {
-  column: ColumnType;
-}
 
 const AddTaskModal = ({ column }: AddTaskModalProps) => {
   const { setIsAddTaskModalOpen } = useModalContext();
