@@ -6,24 +6,18 @@ import {
 import {
   createWorkspace,
   getMyWorkspace,
-  type Workspace,
 } from "../../api/workspace";
+import type {
+  Workspace,
+  WorkspaceState,
+  WorkspaceThunkError,
+  WorkspaceThunkResult,
+} from "../../interface";
 
-interface CreateWorkspaceResult {
-  workspace: Workspace;
-  message: string;
-  code: string;
-}
-
-interface ApiError {
-  code?: string;
-  message: string;
-}
-
-export const fetchMyWorkspace = createAsyncThunk<
+export const fetchMyWorkspaces = createAsyncThunk<
   Workspace[], // what the thunk returns on success
   void, // the argument you pass to dispatch (none here)
-  { rejectValue: ApiError } // the type of what rejectWithValue carries
+  { rejectValue: WorkspaceThunkError } // the type of what rejectWithValue carries
 >("workspace/fetch", async (_, { rejectWithValue }) => {
   const response = await getMyWorkspace();
   if (response.status !== "success") {
@@ -37,9 +31,9 @@ export const fetchMyWorkspace = createAsyncThunk<
 });
 
 export const createWorkspaceThunk = createAsyncThunk<
-  CreateWorkspaceResult, // the new workspace on success
+  WorkspaceThunkResult, // the new workspace on success
   string, // the argument: the workspace name
-  { rejectValue: ApiError }
+  { rejectValue: WorkspaceThunkError }
 >("workspace/create", async (workspaceName, { rejectWithValue }) => {
   const response = await createWorkspace(workspaceName); // your API function
   if (response.status !== "success")
@@ -55,15 +49,6 @@ export const createWorkspaceThunk = createAsyncThunk<
     code: response.code,
   };
 });
-
-interface WorkspaceState {
-  list: Workspace[]; // every workspace the user belongs to; empty is a valid value
-  activeWorkspaceId: string | null; // which one is open right now
-  createStatus: "idle" | "loading" | "succeeded" | "failed";
-  createError: ApiError | null;
-  fetchStatus: "idle" | "loading" | "succeeded" | "failed"; // idle = never fetched
-  fetchError: ApiError | null; // message to show if the fetch failed
-}
 
 const initialState: WorkspaceState = {
   list: [],
@@ -101,15 +86,15 @@ const workspaceSlice = createSlice({
     });
 
     //fetch
-    builder.addCase(fetchMyWorkspace.pending, (state) => {
+    builder.addCase(fetchMyWorkspaces.pending, (state) => {
       state.fetchStatus = "loading";
       state.fetchError = null;
     });
-    builder.addCase(fetchMyWorkspace.fulfilled, (state, action) => {
+    builder.addCase(fetchMyWorkspaces.fulfilled, (state, action) => {
       state.fetchStatus = "succeeded";
       state.list = action.payload;
     });
-    builder.addCase(fetchMyWorkspace.rejected, (state, action) => {
+    builder.addCase(fetchMyWorkspaces.rejected, (state, action) => {
       state.fetchStatus = "failed";
       state.fetchError = action.payload ?? {
         message: action.error.message || "Could not load workspaces",

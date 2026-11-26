@@ -1,17 +1,4 @@
-type ButtonStyle = "primary" | "secondary" | "tertiary" | "disabled";
-
-type ButtonType = "submit" | "button";
-
-interface ButtonProps {
-  buttonStyle: ButtonStyle;
-  children: React.ReactNode;
-  disabled?: boolean;
-  isLoading?: boolean;
-  buttonTertiary?: boolean;
-  additionalStyles?: string;
-  type: ButtonType;
-  onClick?: () => void;
-}
+import type { ButtonProps } from "../../interface";
 
 const Button = ({
   buttonStyle = "primary",

@@ -1,12 +1,5 @@
 import { createContext, useContext } from "react";
-import type { Task } from "../interface";
-
-interface TaskContextType {
-  tasks: Task[];
-  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
-  selectedTask: Task | null;
-  setSelectedTask: React.Dispatch<React.SetStateAction<Task | null>>;
-}
+import type { TaskContextType } from "../interface";
 
 const TaskContext = createContext<TaskContextType | null>(null);
 

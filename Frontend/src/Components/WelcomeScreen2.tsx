@@ -34,6 +34,7 @@ const WelcomeScreen2 = () => {
       // const data = await createWorkspace(workspaceName);
       const data = await dispatch(createWorkspaceThunk(workspaceName)).unwrap();
       console.log(data);
+
       if (data.code === "WORKSPACE_CREATED") {
         showToast(data.message, "success");
         navigate("/landing-page");

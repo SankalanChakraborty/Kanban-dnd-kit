@@ -1,13 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getCurrentUser, type User } from "../../api/user";
-
-type Status = "idle" | "pending" | "succeeded" | "failed";
-
-interface UserState {
-  status: Status;
-  isAuthenticated: boolean;
-  user: User | null;
-}
+import { getCurrentUser } from "../../api/user";
+import type { User, UserState } from "../../interface";
 
 export const fetchCurrentUser = createAsyncThunk<User>(
   "user/fetchCurrentUser",
@@ -26,7 +19,17 @@ const initialState: UserState = {
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: { clearUser: () => initialState },
+  reducers: {
+    clearUser: () => initialState,
+    setUser: (state, action) => {
+      state.user = action.payload;
+      state.status = "succeeded";
+      state.isAuthenticated = true;
+    },
+    setLastActiveWorkspace(state, action) {
+      if (state.user) state.user.lastActiveWorkspaceId = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchCurrentUser.pending, (state) => {
       state.status = "pending";
@@ -45,3 +48,4 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
+export const { clearUser, setUser, setLastActiveWorkspace } = userSlice.actions;

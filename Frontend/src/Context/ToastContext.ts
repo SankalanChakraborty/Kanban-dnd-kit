@@ -1,10 +1,5 @@
 import { createContext, useContext } from "react";
-import type { ToastType } from "../Components/shared/Toast";
-
-interface ToastContextValue {
-  showToast: (message: string, type?: ToastType) => void;
-  hideToast: () => void;
-}
+import type { ToastContextValue } from "../interface";
 
 const ToastContext = createContext<ToastContextValue | null>(null);
 

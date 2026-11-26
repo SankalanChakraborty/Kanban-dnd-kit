@@ -1,31 +1,10 @@
 import { getApiHeaders } from "../utils/getApiHeaders";
+import type {
+  AuthErrorResponse,
+  CurrentUserResponse,
+  LoginRegisterResponse,
+} from "../interface";
 import { authenticatedFetch } from "./authenticatedFetch";
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  workspace: string[];
-  teams: string[];
-  role: string[];
-}
-
-interface LoginRegisterResponse {
-  status: "success";
-  message: string;
-  user: User | null;
-}
-
-interface AuthErrorResponse {
-  status: "error";
-  message: string;
-}
-
-interface CurrentUserResponse {
-  status: string;
-  isAuthenticated: boolean;
-  user: User;
-}
 
 const API_BASE_URL = import.meta.env.VITE_USER_API_BASE_URL;
 

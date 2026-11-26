@@ -543,7 +543,10 @@ export const getCurrentUser = async (
 ) => {
   const { id } = (req as Request & { user: { id: string } }).user;
   try {
-    const user = await User.findOne({ _id: id }, { _id: 1, name: 1, email: 1 });
+    const user = await User.findOne(
+      { _id: id },
+      { _id: 1, name: 1, email: 1, lastActiveWorkspace: 1 },
+    );
     // console.log(user);
     return res.json({
       status: "success",

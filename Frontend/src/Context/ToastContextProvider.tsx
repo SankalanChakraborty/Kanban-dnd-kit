@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
-import Toast, { type ToastType } from "../Components/shared/Toast";
+import Toast from "../Components/shared/Toast";
 import ToastContext from "./ToastContext";
-
-interface ToastState {
-  message: string;
-  type: ToastType;
-}
+import type { ToastState, ToastType } from "../interface";
 
 const ToastContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [toast, setToast] = useState<ToastState | null>(null);

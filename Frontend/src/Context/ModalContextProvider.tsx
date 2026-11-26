@@ -7,6 +7,9 @@ const ModalContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(false);
   const [addTaskColumn, setAddTaskColumn] = useState<ColumnType | null>(null);
 
+  const [isCreateWorkSpaceModalOpen, setIsCreateWorkspaceModalOpen] =
+    useState(false);
+
   return (
     <ModalContext.Provider
       value={{
@@ -16,6 +19,8 @@ const ModalContextProvider = ({ children }: { children: React.ReactNode }) => {
         setIsAddTaskModalOpen,
         addTaskColumn,
         setAddTaskColumn,
+        isCreateWorkSpaceModalOpen,
+        setIsCreateWorkspaceModalOpen,
       }}
     >
       {children}

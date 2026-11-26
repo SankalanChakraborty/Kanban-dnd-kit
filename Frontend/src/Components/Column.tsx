@@ -1,14 +1,11 @@
 import { useTaskContext } from "../Context/TaskContext";
 import Card from "./Card";
-import type { ColumnType } from "../interface";
+import type { ColumnProps } from "../interface";
 import { useDroppable } from "@dnd-kit/react";
 import EmptyTask from "./EmptyTask";
 import { useModalContext } from "../Context/ModalContext";
-interface columnProps {
-  column: ColumnType;
-}
 
-const Column = ({ column }: columnProps) => {
+const Column = ({ column }: ColumnProps) => {
   const { tasks } = useTaskContext();
   const { setIsAddTaskModalOpen, setAddTaskColumn } = useModalContext();
 

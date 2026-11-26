@@ -92,7 +92,9 @@ export const getMyWorkspace = async (
 
   const user = await User.findOne({ _id: userId }, { lastActiveWorkspace: 1 });
 
-  const myWorkspace = await Workspace.find({ _id: user?.lastActiveWorkspace });
+  const myWorkspace = await Workspace.find({ _id: user?.lastActiveWorkspace })
+    .populate("members.user", "name email")
+    .populate("owner", "name email");
 
   return res.status(201).json({
     status: "success",
