@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from "./redux/store/hooks";
 import { clearUser, fetchCurrentUser } from "./redux/slice/userSlice";
 import { useEffect } from "react";
 import { AUTH_EXPIRED_EVENT } from "./api/authenticatedFetch";
+import { PrimeReactProvider } from "primereact/api";
 
 function ProtectedRoute() {
   const dispatch = useAppDispatch();
@@ -38,31 +39,33 @@ function ProtectedRoute() {
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/reset-password" element={<ResetPw />} />
+    <PrimeReactProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/reset-password" element={<ResetPw />} />
 
-        {/* Testing  */}
-        <Route path="/wait-for-invite" element={<WaitForInviteModdal />} />
-        <Route path="/invite-code" element={<InviteCodeModal />} />
+          {/* Testing  */}
+          <Route path="/wait-for-invite" element={<WaitForInviteModdal />} />
+          <Route path="/invite-code" element={<InviteCodeModal />} />
 
-        <Route path="/invitations-modal" element={<Invitations />} />
-        <Route path="/email-verify" element={<VerifyEmailModal />} />
+          <Route path="/invitations-modal" element={<Invitations />} />
+          <Route path="/email-verify" element={<VerifyEmailModal />} />
 
-        {/* Testing */}
+          {/* Testing */}
 
-        <Route element={<ProtectedRoute />}>
-          <Route element={<WorkspaceBootstrap />}>
-            <Route path="/" element={<Board />} />
-            <Route path="/welcome1" element={<WelcomeScreen1 />} />
-            <Route path="/welcome2" element={<WelcomeScreen2 />} />
-            <Route path="/landing-page" element={<WorkspaceLandingPage />} />
-            <Route path="/create-workspace" element={<AddWorkspace />} />
+          <Route element={<ProtectedRoute />}>
+            <Route element={<WorkspaceBootstrap />}>
+              <Route path="/" element={<Board />} />
+              <Route path="/welcome1" element={<WelcomeScreen1 />} />
+              <Route path="/welcome2" element={<WelcomeScreen2 />} />
+              <Route path="/landing-page" element={<WorkspaceLandingPage />} />
+              <Route path="/create-workspace" element={<AddWorkspace />} />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
+    </PrimeReactProvider>
   );
 }
 
